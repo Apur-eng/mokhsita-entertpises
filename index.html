@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mokshita Enterprises — Explore India Through Art & Journeys</title>
+  <meta name="description" content="Discover the soul of India through authentic handcrafted artworks and curated cultural travel experiences. Premium Indian handicrafts and journey packages." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="index.css" />
+</head>
+<body>
+
+<!-- PAGE LOADER -->
+<div class="page-loader" id="page-loader">
+  <div class="loader-emblem"></div>
+  <p class="loader-text">Mokshita Enterprises</p>
+</div>
+
+<!-- NAVIGATION -->
+<nav class="nav" id="main-nav" aria-label="Main navigation">
+  <a href="index.html" class="nav-logo" aria-label="Mokshita Enterprises Home">
+    <span class="nav-logo-title">Mokshita Enterprises</span>
+    <span class="nav-logo-sub">Art &amp; Journeys</span>
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="handicrafts.html" class="nav-link">Handicrafts</a></li>
+    <li><a href="travel.html" class="nav-link">Travel</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Plan Your Journey</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobile-menu" role="navigation">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="handicrafts.html" class="nav-link">Handicrafts</a>
+  <a href="travel.html" class="nav-link">Travel</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">Plan Your Journey</a>
+</div>
+
+<!-- ════════════════════════════════════════════════════════
+     HERO SECTION — Cinematic Taj Mahal
+     ════════════════════════════════════════════════════════ -->
+<section class="hero" id="hero" aria-label="Hero section">
+
+  <!-- Background layers -->
+  <div class="hero-bg" id="hero-parallax">
+    <img src="hero-bg.png" alt="Taj Mahal through Mughal gateway at golden hour" class="hero-bg-img" id="hero-bg-img" />
+    <div class="hero-bg-overlay"></div>
+  </div>
+
+  <!-- Animated gate silhouette -->
+  <div class="hero-gate-wrap" id="hero-gate-wrap" aria-hidden="true">
+    <svg class="hero-gate" viewBox="0 0 900 600" preserveAspectRatio="xMidYMid slice">
+      <!-- Left gate pillar -->
+      <g class="gate-left" id="gate-left">
+        <rect x="0" y="0" width="220" height="600" fill="rgba(30,15,5,0.85)" />
+        <path d="M220,600 L220,150 Q220,60 300,60 Q320,60 340,80" fill="rgba(30,15,5,0.85)" />
+        <!-- Decorative arch detail -->
+        <path d="M200,580 L200,200 Q200,100 280,90" fill="none" stroke="rgba(201,168,76,0.25)" stroke-width="1" />
+        <circle cx="200" cy="200" r="3" fill="rgba(201,168,76,0.4)" />
+      </g>
+      <!-- Right gate pillar -->
+      <g class="gate-right" id="gate-right">
+        <rect x="680" y="0" width="220" height="600" fill="rgba(30,15,5,0.85)" />
+        <path d="M680,600 L680,150 Q680,60 600,60 Q580,60 560,80" fill="rgba(30,15,5,0.85)" />
+        <path d="M700,580 L700,200 Q700,100 620,90" fill="none" stroke="rgba(201,168,76,0.25)" stroke-width="1" />
+        <circle cx="700" cy="200" r="3" fill="rgba(201,168,76,0.4)" />
+      </g>
+      <!-- Arch top piece -->
+      <g class="gate-arch" id="gate-arch">
+        <path d="M220,0 L220,60 Q450,-60 680,60 L680,0 Z" fill="rgba(30,15,5,0.9)" />
+        <!-- Arch ornament -->
+        <path d="M250,0 L250,40 Q450,-30 650,40 L650,0" fill="none" stroke="rgba(201,168,76,0.2)" stroke-width="1" />
+        <path d="M290,0 L290,20 Q450,-15 610,20 L610,0" fill="none" stroke="rgba(201,168,76,0.15)" stroke-width="0.5" />
+      </g>
+
+    </svg>
+  </div>
+
+  <!-- Ripple canvas overlay -->
+  <canvas class="hero-ripple" id="ripple-canvas" aria-hidden="true"></canvas>
+
+  <!-- Fog/mist layers -->
+  <div class="hero-fog hero-fog--1" aria-hidden="true"></div>
+  <div class="hero-fog hero-fog--2" aria-hidden="true"></div>
+
+  <!-- Content -->
+  <div class="hero-content" id="hero-content">
+    <div class="hero-eyebrow" id="hero-eyebrow">
+      <span class="hero-eyebrow-line"></span>
+      <span>Est. In Every Brushstroke & Footstep</span>
+      <span class="hero-eyebrow-line"></span>
+    </div>
+    <h1 class="hero-title" id="hero-title">
+      Explore India<br/>
+      <em class="hero-title-accent">Through Art &amp; Journeys</em>
+    </h1>
+    <p class="hero-subtitle" id="hero-subtitle">
+      Where master artisans breathe life into centuries-old crafts,<br class="desktop-br"/>
+      and curated voyages unveil the living poetry of Bharat.
+    </p>
+    <div class="hero-cta-row" id="hero-cta">
+      <a href="handicrafts.html" class="btn btn-primary hero-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        Discover Crafts
+      </a>
+      <a href="travel.html" class="btn btn-ghost hero-btn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+        Plan a Journey
+      </a>
+    </div>
+    <div class="hero-scroll-cue" aria-hidden="true">
+      <div class="hero-scroll-line"></div>
+      <span>Scroll to explore</span>
+    </div>
+  </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     STORY STRIP
+     ════════════════════════════════════════════════════════ -->
+<section class="section section--dark story-strip">
+  <div class="story-grid">
+    <div class="story-text reveal">
+      <div class="section-eyebrow">Our Philosophy</div>
+      <h2 class="section-title">Crafted by Hands.<br/>Carried by the Wind.</h2>
+      <p class="section-subtitle">
+        India's greatest artworks were never born in factories — they were woven into the dust of ancient cities, fired in village kilns, and painted in devotion. We bring these stories to your home, and invite you to walk the paths that inspired them.
+      </p>
+      <div class="story-tags">
+        <span class="badge badge-gold">100% Handmade</span>
+        <span class="badge badge-gold">Artisan Supported</span>
+        <span class="badge badge-gold">Ethically Sourced</span>
+      </div>
+    </div>
+    <div class="story-stats reveal reveal-delay-2">
+      <div class="stat-item">
+        <span class="stat-number" data-target="120" data-suffix="+">0+</span>
+        <span class="stat-label">Master Artisans</span>
+      </div>
+      <div class="stat-divider" aria-hidden="true"></div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="18" data-suffix=" States">0 States</span>
+        <span class="stat-label">Across India</span>
+      </div>
+      <div class="stat-divider" aria-hidden="true"></div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="2400" data-suffix="+">0+</span>
+        <span class="stat-label">Happy Travellers</span>
+      </div>
+      <div class="stat-divider" aria-hidden="true"></div>
+      <div class="stat-item">
+        <span class="stat-number" data-target="8" data-suffix=" Years">0 Years</span>
+        <span class="stat-label">Of Storytelling</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     FEATURED HANDICRAFTS (preview)
+     ════════════════════════════════════════════════════════ -->
+<section class="section section--cream" id="crafts-preview">
+  <div class="section-header section-header--center reveal">
+    <div class="section-eyebrow">Handpicked Collection</div>
+    <h2 class="section-title">The Art of Bharat</h2>
+    <p class="section-subtitle">Each piece carries generations of technique, devotion, and living tradition.</p>
+  </div>
+
+  <div class="preview-grid">
+
+    <article class="craft-card card reveal reveal-delay-1">
+      <div class="card-image-wrap craft-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1674574124473-e91fdcabaefc?w=600&q=80"
+          alt="Pichwai Art" loading="lazy" />
+        <div class="craft-card-badge">
+          <span class="badge badge-gold">Handpainted</span>
+        </div>
+        <div class="craft-overlay">
+          <button class="btn btn-primary btn-sm open-modal-btn">Quick View</button>
+        </div>
+      </div>
+      <div class="craft-card-body">
+        <h3 class="craft-name">Pichwai Art</h3>
+        <p class="craft-desc" style="display:none;">Devotional paintings depicting Lord Krishna's life, crafted on handwoven cotton cloth with natural pigments.</p>
+        <p class="craft-origin">Nathdwara, Rajasthan</p>
+        <div class="craft-footer">
+          <span class="craft-price">Starting ₹650</span>
+          <svg class="craft-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </article>
+
+    <article class="craft-card card reveal reveal-delay-2">
+      <div class="card-image-wrap craft-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&q=80"
+          alt="Marble Inlay Art" loading="lazy" />
+        <div class="craft-card-badge">
+          <span class="badge badge-amber">Heritage Craft</span>
+        </div>
+        <div class="craft-overlay">
+          <button class="btn btn-primary btn-sm open-modal-btn">Quick View</button>
+        </div>
+      </div>
+      <div class="craft-card-body">
+        <h3 class="craft-name">Marble Inlay</h3>
+        <p class="craft-desc" style="display:none;">The same pietra dura technique used in the Taj Mahal — semi-precious stones hand-set into pure white marble.</p>
+        <p class="craft-origin">Agra, Uttar Pradesh</p>
+        <div class="craft-footer">
+          <span class="craft-price">Starting ₹400</span>
+          <svg class="craft-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </article>
+
+    <article class="craft-card card reveal reveal-delay-3">
+      <div class="card-image-wrap craft-img-wrap">
+        <img
+          src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=600&q=80"
+          alt="Traditional Pottery" loading="lazy" />
+        <div class="craft-card-badge">
+          <span class="badge badge-gold">Artisan Made</span>
+        </div>
+        <div class="craft-overlay">
+          <button class="btn btn-primary btn-sm open-modal-btn">Quick View</button>
+        </div>
+      </div>
+      <div class="craft-card-body">
+        <h3 class="craft-name">Traditional Pottery</h3>
+        <p class="craft-desc" style="display:none;">From Jaipur's farmed blue pottery to Khurja's terracotta traditions — hand-thrown on the wheel.</p>
+        <p class="craft-origin">Khurja, Uttar Pradesh</p>
+        <div class="craft-footer">
+          <span class="craft-price">Starting ₹450</span>
+          <svg class="craft-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </article>
+
+    <article class="craft-card card reveal reveal-delay-4">
+      <div class="card-image-wrap craft-img-wrap">
+        <img src="https://images.unsplash.com/photo-1606722590583-6951b5ea92ad?w=600&q=80" alt="Handmade Textiles" loading="lazy" />
+        <div class="craft-card-badge"><span class="badge badge-gold">Woven Art</span></div>
+        <div class="craft-overlay"><button class="btn btn-primary btn-sm open-modal-btn">Quick View</button></div>
+      </div>
+      <div class="craft-card-body">
+        <h3 class="craft-name">Handmade Textiles</h3>
+        <p class="craft-desc" style="display:none;">Intricate textiles woven and block-printed by master artisans from Rajasthan and Gujarat.</p>
+        <p class="craft-origin">Jaipur, Uttar Pradesh</p>
+        <div class="craft-footer">
+          <span class="craft-price">Starting ₹1,200</span>
+          <svg class="craft-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </article>
+
+    <article class="craft-card card reveal">
+      <div class="card-image-wrap craft-img-wrap">
+        <img src="https://images.unsplash.com/photo-1577083165350-14b4f5146bd2?w=600&q=80" alt="Wooden Carvings" loading="lazy" />
+        <div class="craft-card-badge"><span class="badge badge-gold">Woodcraft</span></div>
+        <div class="craft-overlay"><button class="btn btn-primary btn-sm open-modal-btn">Quick View</button></div>
+      </div>
+      <div class="craft-card-body">
+        <h3 class="craft-name">Wooden Carvings</h3>
+        <p class="craft-desc" style="display:none;">Beautiful hand-carved wooden decor, from intricate wall panels to detailed traditional figurines.</p>
+        <p class="craft-origin">Saharanpur, Uttar Pradesh</p>
+        <div class="craft-footer">
+          <span class="craft-price">Starting ₹800</span>
+          <svg class="craft-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </article>
+
+    <article class="craft-card card reveal reveal-delay-1">
+      <div class="card-image-wrap craft-img-wrap">
+        <img src="https://images.unsplash.com/photo-1618022325802-7e5e732d97a1?w=600&q=80" alt="Brass Craft" loading="lazy" />
+        <div class="craft-card-badge"><span class="badge badge-amber">Metal Art</span></div>
+        <div class="craft-overlay"><button class="btn btn-primary btn-sm open-modal-btn">Quick View</button></div>
+      </div>
+      <div class="craft-card-body">
+        <h3 class="craft-name">Brass Artifacts</h3>
+        <p class="craft-desc" style="display:none;">Heritage metalcraft showcasing intricate patterns and timeless elegance, handmade by Moradabad artisans.</p>
+        <p class="craft-origin">Moradabad, Uttar Pradesh</p>
+        <div class="craft-footer">
+          <span class="craft-price">Starting ₹950</span>
+          <svg class="craft-arrow" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+    </article>
+
+  </div>
+
+  <div class="section-cta-row reveal">
+    <a href="handicrafts.html" class="btn btn-outline">Explore All Handicrafts →</a>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     JOURNEYS PREVIEW
+     ════════════════════════════════════════════════════════ -->
+<section class="section" id="journeys-preview" style="background: var(--cream-light);">
+  <div class="section-header reveal">
+    <div class="section-eyebrow">Curated Escapes</div>
+    <h2 class="section-title">Where Every Path<br/>Tells a Story</h2>
+    <p class="section-subtitle">Handpicked cultural journeys that take you off the beaten track and into the living heart of India.</p>
+  </div>
+
+  <div class="travel-rows">
+    
+    <!-- Row 1: AGRA (Image Left) -->
+    <div class="travel-row reveal" style="flex-direction: row;">
+      <div class="travel-row-img">
+        <img src="images/fort4.jpg" alt="Agra Fort and Royal Heritage" loading="lazy" />
+      </div>
+      <div class="travel-row-text">
+        <div class="section-eyebrow">Mughal Canvas</div>
+        <h3 class="travel-row-name">Agra</h3>
+        <p class="travel-row-desc">Witness the poetry of marble at the Taj Mahal at dawn, and trace the rise and fall of empires within the red sandstone walls of the grand Agra Fort. A journey deep into medieval grandeur and artisan devotion.</p>
+        <a href="travel.html#pkg-agra" class="btn btn-outline">Explore Agra</a>
+      </div>
+    </div>
+
+    <!-- Row 2: DELHI (Image Right) -->
+    <div class="travel-row reveal reveal-delay-1" style="flex-direction: row-reverse;">
+      <div class="travel-row-img">
+        <img src="images/fort1.jpg" alt="Red Fort, Delhi" loading="lazy" />
+      </div>
+      <div class="travel-row-text">
+        <div class="section-eyebrow">The Cosmopolitan Heart</div>
+        <h3 class="travel-row-name">Delhi</h3>
+        <p class="travel-row-desc">From the winding, spice-scented alleyways of Chandni Chowk to the imposing, sovereign walls of the Red Fort. Experience a city where eight ancient capitals seamlessly blend with modern aspirations.</p>
+        <a href="travel.html#pkg-delhi" class="btn btn-outline">Explore Delhi</a>
+      </div>
+    </div>
+
+    <!-- Row 3: JAIPUR (Image Left) -->
+    <div class="travel-row reveal reveal-delay-2" style="flex-direction: row;">
+      <div class="travel-row-img">
+        <img src="images/fort2.jpg" alt="Amber Fort, Jaipur" loading="lazy" />
+      </div>
+      <div class="travel-row-text">
+        <div class="section-eyebrow">The Pink City</div>
+        <h3 class="travel-row-name">Jaipur</h3>
+        <p class="travel-row-desc">Ascend to the majestic Amber Fort, wander through vibrant bazaars filled with block-printed textiles and raw gemstones, and immerse yourself in the living traditions of Rajasthan's royal heritage.</p>
+        <a href="travel.html#pkg-jaipur" class="btn btn-outline">Explore Jaipur</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="section-cta-row reveal">
+    <a href="travel.html" class="btn btn-outline">Browse All Journeys →</a>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     QUOTE SECTION
+     ════════════════════════════════════════════════════════ -->
+<section class="section testimonial-quote" id="quote-section">
+  <div class="quote-wrap reveal">
+    <div class="quote-ornament" aria-hidden="true">"</div>
+    <blockquote class="quote-text">
+      India does not lack talent — it lacks the world's gaze turned toward her <em>makers.</em>
+    </blockquote>
+    <cite class="quote-author">
+      <span class="quote-dash">—</span>
+      Riya Mehta, Founder · Mokshita Enterprises
+    </cite>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     NEWSLETTER / CTA BAND
+     ════════════════════════════════════════════════════════ -->
+<section class="section cta-band section--dark">
+  <div class="cta-band-inner reveal">
+    <div class="section-eyebrow" style="color:var(--gold-light);">Stay Connected</div>
+    <h2 class="section-title" style="color:var(--cream);">Never Miss a Story</h2>
+    <p class="section-subtitle" style="color:var(--beige-dark);">Get monthly updates on new artisans, curated travel stories, and exclusive offers.</p>
+    <form class="newsletter-form" id="newsletter-form" onsubmit="handleNewsletter(event)">
+      <input type="email" id="newsletter-email" class="newsletter-input"
+             placeholder="Your email address" required aria-label="Email address" />
+      <button type="submit" class="btn btn-primary">Subscribe</button>
+    </form>
+    <p class="newsletter-note">No spam, ever. Unsubscribe anytime.</p>
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     FOOTER
+     ════════════════════════════════════════════════════════ -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-grid">
+    <div>
+      <p class="footer-brand-name">Mokshita Enterprises</p>
+      <p class="footer-brand-tagline">Art &amp; Journeys</p>
+      <p class="footer-brand-desc">
+        We connect the world to India's living artisan traditions and curate experiences that transform the way you see this ancient civilisation.
+      </p>
+      <div class="footer-social">
+        <a href="#" class="footer-social-btn" aria-label="Instagram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="#" class="footer-social-btn" aria-label="WhatsApp">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </a>
+        <a href="#" class="footer-social-btn" aria-label="Pinterest">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2C6.477 2 2 6.477 2 12c0 4.236 2.636 7.855 6.356 9.312-.088-.791-.167-2.005.035-2.868.181-.78 1.172-4.97 1.172-4.97s-.299-.598-.299-1.482c0-1.388.806-2.428 1.808-2.428.853 0 1.267.641 1.267 1.408 0 .858-.546 2.14-.828 3.33-.236.995.499 1.806 1.476 1.806 1.771 0 3.132-1.867 3.132-4.563 0-2.387-1.716-4.057-4.165-4.057-2.836 0-4.498 2.127-4.498 4.326 0 .856.33 1.774.741 2.277a.3.3 0 0 1 .069.286c-.075.314-.243.995-.276 1.134-.044.183-.146.222-.337.134-1.249-.581-2.03-2.407-2.03-3.874 0-3.154 2.292-6.052 6.608-6.052 3.469 0 6.165 2.473 6.165 5.776 0 3.447-2.173 6.22-5.19 6.22-1.013 0-1.966-.527-2.292-1.148l-.623 2.378c-.226.869-.835 1.958-1.244 2.621.937.29 1.931.446 2.962.446 5.523 0 10-4.477 10-10S17.523 2 12 2z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Explore</p>
+      <ul class="footer-links">
+        <li><a href="index.html" class="footer-link">Home</a></li>
+        <li><a href="handicrafts.html" class="footer-link">Handicrafts</a></li>
+        <li><a href="travel.html" class="footer-link">Travel Packages</a></li>
+        <li><a href="contact.html" class="footer-link">Contact Us</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Crafts</p>
+      <ul class="footer-links">
+        <li><a href="handicrafts.html" class="footer-link">Pichwai Art</a></li>
+        <li><a href="handicrafts.html" class="footer-link">Marble Inlay</a></li>
+        <li><a href="handicrafts.html" class="footer-link">Watercolour</a></li>
+        <li><a href="handicrafts.html" class="footer-link">Crochet</a></li>
+        <li><a href="handicrafts.html" class="footer-link">Pottery</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Contact</p>
+      <ul class="footer-links">
+        <li><a href="mailto:mokshitaenterprises2024@gmail.com" class="footer-link">mokshitaenterprises2024@gmail.com</a></li>
+        <li><a href="tel:+918871872924" class="footer-link">+91-8871872924</a></li>
+        <li class="footer-link" style="pointer-events:none;">Agra, Uttar Pradesh, India</li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">© 2025 Mokshita Enterprises. All rights reserved.</p>
+    <ul class="footer-bottom-links" role="list">
+      <li><a href="#" class="footer-bottom-link">Privacy Policy</a></li>
+      <li><a href="#" class="footer-bottom-link">Terms of Use</a></li>
+      <li><a href="#" class="footer-bottom-link">Shipping Policy</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="main.js"></script>
+<script>
+  /* ── HERO CINEMATIC SEQUENCE ─────────────────────────────── */
+  const PHASES = {
+    APPROACH: 'approach',   // Camera "moves in"
+    GATE_OPEN: 'gate-open', // Gate SVG opens
+    SETTLE:   'settle',     // Final living state
+  };
+
+  let phase = PHASES.APPROACH;
+  const gateLeft   = document.getElementById('gate-left');
+  const gateRight  = document.getElementById('gate-right');
+  const gateArch   = document.getElementById('gate-arch');
+  const heroBgImg  = document.getElementById('hero-bg-img');
+  const heroContent = document.getElementById('hero-content');
+  const heroEyebrow = document.getElementById('hero-eyebrow');
+  const heroTitle   = document.getElementById('hero-title');
+  const heroSubtitle= document.getElementById('hero-subtitle');
+  const heroCta     = document.getElementById('hero-cta');
+  const heroFogs    = document.querySelectorAll('.hero-fog');
+
+  function runHeroSequence() {
+    // Phase 1: slow zoom-in approach (CSS transform on hero-bg-img)
+    heroBgImg.style.transform = 'scale(1.18)';
+    heroBgImg.style.transition = 'transform 4s cubic-bezier(0.2,0,0.4,1)';
+
+    // Phase 2: gate opens at 2.8s
+    setTimeout(() => {
+      phase = PHASES.GATE_OPEN;
+      gateLeft.style.transform  = 'translateX(-100%)';
+      gateLeft.style.transition  = 'transform 1.6s cubic-bezier(0.4,0,0.2,1)';
+      gateRight.style.transform = 'translateX(100%)';
+      gateRight.style.transition = 'transform 1.6s cubic-bezier(0.4,0,0.2,1)';
+      gateArch.style.transform  = 'translateY(-100%)';
+      gateArch.style.transition  = 'transform 1.4s 0.2s cubic-bezier(0.4,0,0.2,1)';
+
+      // Settle zoom back
+      heroBgImg.style.transform = 'scale(1.04)';
+      heroBgImg.style.transition = 'transform 3s 0.5s cubic-bezier(0.4,0,0.2,1)';
+    }, 2800);
+
+    // Phase 3: reveal content at 4.6s
+    setTimeout(() => {
+      phase = PHASES.SETTLE;
+      heroContent.classList.add('visible');
+      [heroEyebrow, heroTitle, heroSubtitle, heroCta].forEach((el, i) => {
+        if (el) {
+          el.style.transitionDelay = `${i * 0.18}s`;
+          el.classList.add('hero-item-visible');
+        }
+      });
+      // Fogs in
+      heroFogs.forEach((f, i) => {
+        f.style.transitionDelay = `${i * 0.3}s`;
+        f.classList.add('fog-visible');
+      });
+    }, 4600);
+  }
+
+  // Start after loader hides
+  setTimeout(runHeroSequence, 700);
+
+  /* ── NEWSLETTER ──────────────────────────────────────────── */
+  function handleNewsletter(e) {
+    e.preventDefault();
+    const input  = document.getElementById('newsletter-email');
+    const btn    = e.target.querySelector('button');
+    btn.textContent = 'Subscribed ✓';
+    btn.style.background = '#3a8a56';
+    input.value = '';
+    setTimeout(() => {
+      btn.textContent = 'Subscribe';
+      btn.style.background = '';
+    }, 3000);
+  }
+</script>
+
+<div id="product-modal" class="product-modal">
+  <div class="modal-close" id="modal-close">&times;</div>
+  <div class="modal-content">
+    <img id="modal-img" src="" alt="Product">
+    <div class="modal-info">
+      <h2 id="modal-title" class="modal-title"></h2>
+      <p id="modal-desc" class="modal-desc"></p>
+      <div id="modal-price" class="modal-price"></div>
+      <a id="modal-buy-btn" href="#" target="_blank" class="btn btn-primary">Order on WhatsApp</a>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

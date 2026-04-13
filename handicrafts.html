@@ -1,0 +1,881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Handicrafts — Mokshita Enterprises</title>
+  <meta name="description" content="Shop authentic Indian handicrafts — Pichwai art, marble inlay, watercolour paintings, crochet, and traditional pottery crafted by master artisans." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="subpage.css" />
+  <link rel="stylesheet" href="handicrafts.css" />
+  <style>
+    /* ── Card Image Consistent Sizing ── */
+    .product-img-wrap img {
+      width: 100%;
+      height: 240px;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+    }
+
+    /* ── Card Slider ── */
+    .card-slider {
+      position: relative;
+      overflow: hidden;
+      width: 100%;
+      height: 240px;
+      background: #f4f0e8;
+    }
+    .card-slides {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+    .card-slide {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      opacity: 0;
+      transition: opacity 0.5s ease;
+    }
+    .card-slide.active { opacity: 1; }
+
+    /* Dot navigation */
+    .card-slider-dots {
+      position: absolute;
+      bottom: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 5;
+    }
+    .cs-dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.5);
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.2s;
+      padding: 0;
+    }
+    .cs-dot.active {
+      background: var(--amber, #c9a84c);
+      transform: scale(1.3);
+    }
+
+    /* Arrow navigation */
+    .cs-arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(0,0,0,0.35);
+      color: #fff;
+      border: none;
+      width: 28px; height: 28px;
+      border-radius: 50%;
+      font-size: 1.2rem;
+      line-height: 1;
+      cursor: pointer;
+      z-index: 5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.2s;
+    }
+    .card-slider:hover .cs-arrow { opacity: 1; }
+    .cs-arrow--prev { left: 8px; }
+    .cs-arrow--next { right: 8px; }
+    .cs-arrow:hover { background: rgba(0,0,0,0.6); }
+
+    /* Hover zoom for regular images */
+    .product-img-wrap img {
+      transition: transform 0.5s ease;
+    }
+    .product-card:hover .product-img-wrap img {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-loader" id="page-loader">
+  <div class="loader-emblem"></div>
+  <p class="loader-text">Mokshita Enterprises</p>
+</div>
+
+<nav class="nav" id="main-nav" aria-label="Main navigation">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-title">Mokshita Enterprises</span>
+    <span class="nav-logo-sub">Art &amp; Journeys</span>
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="index.html" class="nav-link">Home</a></li>
+    <li><a href="handicrafts.html" class="nav-link">Handicrafts</a></li>
+    <li><a href="travel.html" class="nav-link">Travel</a></li>
+    <li><a href="contact.html" class="nav-link">Contact</a></li>
+  </ul>
+  <a href="contact.html" class="nav-cta">Plan Your Journey</a>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html" class="nav-link">Home</a>
+  <a href="handicrafts.html" class="nav-link">Handicrafts</a>
+  <a href="travel.html" class="nav-link">Travel</a>
+  <a href="contact.html" class="nav-link">Contact</a>
+  <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">Plan Your Journey</a>
+</div>
+
+<!-- PAGE HERO -->
+<header class="page-hero">
+  <div class="page-hero-bg">
+    <img src="images/gimini_generated.png" alt="Handcrafted India" />
+    <div class="page-hero-overlay"></div>
+  </div>
+  <div class="page-hero-content">
+    <div class="section-eyebrow" style="color:var(--gold-light);" aria-label="Section label">The Collection</div>
+    <h1 class="page-hero-title">Handcrafted India</h1>
+    <p class="page-hero-sub">Each piece is a conversation between the artisan's hands and centuries of tradition.</p>
+  </div>
+  <div class="page-hero-scroll" aria-hidden="true">
+    <div class="hero-scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</header>
+
+<!-- FILTER BAR -->
+<div class="filter-bar section--cream" id="filter-bar">
+  <div class="search-container reveal">
+    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+    <input type="text" id="product-search" class="search-input" placeholder="Search crafts (e.g. Pichwai, Marble)..." aria-label="Search" />
+  </div>
+  <div class="filter-inner">
+    <button class="filter-btn active" data-filter="all" id="filter-all">All Crafts</button>
+    <button class="filter-btn" data-filter="painting" id="filter-painting">Paintings</button>
+    <button class="filter-btn" data-filter="marble" id="filter-marble">Marble &amp; Decor</button>
+    <button class="filter-btn" data-filter="wooden" id="filter-wooden">Wooden Items</button>
+    <button class="filter-btn" data-filter="crochet" id="filter-crochet">Crochet</button>
+    <button class="filter-btn" data-filter="textile" id="filter-textile">Textile &amp; Pouches</button>
+    <button class="filter-btn" data-filter="zardozi" id="filter-zardozi">Zardozi</button>
+  </div>
+</div>
+
+<!-- PRODUCT GRID -->
+<section class="section section--cream" id="products">
+  <div class="products-grid" id="products-grid">
+
+    <!-- Taj Mahal Watercolour — SLIDER CARD -->
+    <article class="product-card card reveal" data-category="painting" style="animation-delay:0.0s"
+      data-detail="Hand-painted on A5 archival cotton paper using lightfast watercolour pigments, this piece captures the Taj Mahal in four dreamy colour moods — blue dusk, green dawn, orange sunset, and purple twilight. Each brushstroke is a study of the monument's perfect symmetry. Signed by the artist. Ships flat with protective mount. Size: A5 (148 × 210 mm). Frame-ready. Choose your colour when ordering.">
+      <div class="card-image-wrap product-img-wrap">
+        <div class="card-slider" id="slider-taj">
+          <div class="card-slides">
+            <img src="images/items/tajmahalblue.jpeg"   alt="Taj Mahal Blue"   class="card-slide active" loading="lazy" />
+            <img src="images/items/tajmahalgreen.jpeg"  alt="Taj Mahal Green"  class="card-slide" loading="lazy" />
+            <img src="images/items/tajmahalorange.jpeg" alt="Taj Mahal Orange" class="card-slide" loading="lazy" />
+            <img src="images/items/tajmahalpurple.jpeg" alt="Taj Mahal Purple" class="card-slide" loading="lazy" />
+          </div>
+          <div class="card-slider-dots">
+            <button class="cs-dot active" data-slide="0" aria-label="Blue"></button>
+            <button class="cs-dot" data-slide="1" aria-label="Green"></button>
+            <button class="cs-dot" data-slide="2" aria-label="Orange"></button>
+            <button class="cs-dot" data-slide="3" aria-label="Purple"></button>
+          </div>
+          <button class="cs-arrow cs-arrow--prev" aria-label="Previous">&#8249;</button>
+          <button class="cs-arrow cs-arrow--next" aria-label="Next">&#8250;</button>
+          <div class="product-tag"><span class="badge badge-gold">4 Colours</span></div>
+        </div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Taj Mahal Watercolour (A5)</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Exquisite hand-painted Taj Mahal watercolour — available in Blue, Green, Orange &amp; Purple.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹600</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Taj%20Mahal%20Watercolour%20(A5)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Pichwai Art -->
+    <article class="product-card card reveal" data-category="painting" style="animation-delay:0.1s"
+      data-detail="Pichwai is a 400-year-old devotional art form originating in Nathdwara, Rajasthan, depicting scenes from Lord Krishna's life. Painted on handwoven cotton cloth using natural mineral pigments — ochre, indigo, and lampblack — each panel takes 3–5 days to complete. This A5 piece shows Krishna in a lotus garden. Museum-quality textile backing included.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/pichwai art3.jpeg" alt="Pichwai Art (A5)" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Painting</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Pichwai Art (A5)</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Devotional paintings depicting Lord Krishna's life, crafted on handwoven cotton cloth with natural pigments.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹650</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Pichwai%20Art%20(A5)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Watercolour Mini -->
+    <article class="product-card card reveal" data-category="painting" style="animation-delay:0.2s"
+      data-detail="A miniature watercolour rendered on handmade rag paper, measuring just 2.5 × 6 inches. Despite its small size, this piece carries extraordinary detail — palace windows, peacock motifs, and Rajasthani folk patterns all compressed into an intimate format. Perfect as a greeting card keepsake, journal insert, or framed desk accent. Each mini is unique; no two are identical.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/watercolourtajmahal1.jpeg" alt="Watercolour Mini" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Painting</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Watercolour Mini (2.5×6 inch)</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Delicate miniature-inspired watercolours, perfect for elegant home decor and gifting.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹300</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Watercolour%20Mini" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Marble Tortoise -->
+    <article class="product-card card reveal" data-category="marble" style="animation-delay:0.0s"
+      data-detail="Carved from pure white Makrana marble — the same quarry that supplied stone for the Taj Mahal — this 2.5-inch tortoise features hand-set inlay of malachite, lapis lazuli, and carnelian using the ancient pietra dura technique. The tortoise is a symbol of longevity and good fortune in Indian tradition. Each piece is unique. Velvet pouch included.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/ChatGPT Image Apr 13, 2026, 06_11_51 PM.png" alt="Marble Tortoise" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Marble</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Marble Tortoise (Inlay Work, 2.5")</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Finely carved Makrana marble tortoise with authentic pietra dura stone inlay work.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹430</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Marble%20Tortoise" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Marble Coaster Plates -->
+    <article class="product-card card reveal" data-category="marble" style="animation-delay:0.1s"
+      data-detail="A set of two 5-inch coasters in pristine Makrana marble, featuring symmetrical floral inlay with semi-precious stones — mother of pearl petals, green malachite leaves, and black onyx accents. The base is felt-lined to protect surfaces. Heat-resistant up to 200°C. Food-safe surface. Gift-boxed.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Handcrafted marble plates with floral design (1).png" alt="Marble Coaster Plates" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Marble</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Marble Coaster Plates (5")</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Set of elegant 5-inch Makrana marble coasters featuring intricate floral inlay patterns.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹750</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Marble%20Coaster%20Plates" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Wooden Dice -->
+    <article class="product-card card reveal" data-category="wooden" style="animation-delay:0.2s"
+      data-detail="Individually hand-carved from seasoned sheesham wood by craftsmen in Saharanpur, these dice are sanded through six grit levels and finished with natural beeswax. Each face is laser-etched for perfect pip alignment. The set contains 5 standard-sized dice (16mm). Comes in a muslin drawstring pouch.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Wooden dice and wooden die holder.jpg.jpeg" alt="Wooden Dice" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Wooden</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Wooden Dice</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Hand-carved premium wooden dice set, polished to a smooth, natural finish.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹370</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Wooden%20Dice" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Wooden Ganesha -->
+    <article class="product-card card reveal" data-category="wooden" style="animation-delay:0.0s"
+      data-detail="This 2-inch Ganesha is carved by hand from rosewood in the traditional South Indian style, with extraordinary fine detail in the crown, trunk curl, modaka sweet, and lotus seat. Ganesha is the remover of obstacles and bringer of new beginnings — a beloved gift for housewarming, new businesses, and spiritual spaces. Each piece is unique and lightly finished with sandalwood oil.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Handcrafted Ganesha idol on white background.png" alt="Wooden Ganesha" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Wooden</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Wooden Ganesha (2")</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A beautifully detailed 2-inch wooden carving of Lord Ganesha, perfect for your altar or desk.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹310</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Wooden%20Ganesha" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Crochet Doll -->
+    <article class="product-card card reveal" data-category="crochet" style="animation-delay:0.1s"
+      data-detail="Crocheted stitch-by-stitch by skilled artisan women from rural Maharashtra using 100% mercerised cotton yarn in a spectrum of vibrant, fade-resistant colours. Each doll stands approximately 8 inches tall and features hand-sewn facial details, braided hair, and a traditional blouse-and-skirt outfit. Child-safe — no small parts. Machine washable on gentle cycle.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Handmade crochet doll with vibrant yarn details.png" alt="Crochet Doll" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Crochet</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Crochet Doll (Multicolour)</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Lovingly handcrafted multicolour crochet doll, made from pure cotton yarn.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹750</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Crochet%20Doll%20(Multicolour)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Crochet Turtle -->
+    <article class="product-card card reveal" data-category="crochet" style="animation-delay:0.2s"
+      data-detail="This sea turtle is crocheted using a tight amigurumi technique that gives it a firm, squeezable body. Filled with hypoallergenic polyfill. The shell is worked in contrasting hexagonal panels in coral, teal, and gold, with a whip-stitched underbelly. Measures approx. 5 inches long. Machine washable.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Crochet turtles side by side.png" alt="Crochet Turtle" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Crochet</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Crochet Turtle (Multicolour)</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A vibrant, soft multicolour crochet turtle, showcasing intricate thread artistry.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹350</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Crochet%20Turtle%20(Multicolour)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Crochet Sunflower Keyring -->
+    <article class="product-card card reveal" data-category="crochet" style="animation-delay:0.0s"
+      data-detail="A micro-crochet sunflower with golden yellow petals and a rich chocolate-brown seeded centre, attached to a sturdy split-ring keyring with a lobster clasp. The flower diameter is approx. 4 cm. Made from durable polyester yarn. Each keyring takes about 45 minutes of handwork. Comes with a small thank-you card from the artisan.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Sunflower.jpg.jpeg" alt="Crochet Sunflower Keyring" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Crochet</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Crochet Sunflower Keyring</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A bright and cheerful sunflower crochet keyring, perfect as an everyday accessory.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹250</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Crochet%20Sunflower%20Keyring" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Hand-painted Elephant Pouch -->
+    <article class="product-card card reveal" data-category="textile" style="animation-delay:0.1s"
+      data-detail="Crafted from premium cotton canvas, this drawstring pouch features a detailed elephant illustration hand-painted using textile pigments that are fixed with heat for permanence — they will not bleed or fade with use. The elephant is adorned with traditional Rajasthani floral headgear and beaded anklets. Size: 18 × 14 cm. Machine washable.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Vibrant folk-art elephant pouch design.png" alt="Hand-painted Elephant Pouch" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Textile</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Hand-painted Elephant Pouch</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A premium fabric pouch featuring delicate hand-painted elephant motifs and fine stitching.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹550</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Hand-painted%20Elephant%20Pouch" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Double Side Elephant (Mehroon) -->
+    <article class="product-card card reveal" data-category="zardozi" style="animation-delay:0.2s"
+      data-detail="Zardozi is the ancient art of embroidering with real gold and silver metallic threads, originating in Persia and perfected in Mughal India. This double-sided mehroon (deep maroon) elephant ornament is embroidered front and back using zari threads on velvet, filled with cotton padding, and finished with sequins along the edges. Can be hung as a wall piece or used as a bag charm.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Intricate Zardozi elephant ornament on velvet.png" alt="Double Side Elephant Mehroon" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Zardozi</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Double Side Elephant (Mehroon)</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Mehroon Zardozi elephant ornament with traditional metallic embroidery on both sides.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹480</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Double%20Side%20Elephant%20(Mehroon)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Single Side Elephant -->
+    <article class="product-card card reveal" data-category="zardozi" style="animation-delay:0.0s"
+      data-detail="A single-sided Zardozi elephant embroidered on rich velvet fabric using gold zari thread, highlighted with silver sequins and colour-fast acrylic gems. Available in three vibrant colourways: crimson red on ivory, bottle green on cream, or royal blue on black. Approx. 10 × 8 cm. Comes with a loop for hanging.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Red Elephant( Zardozi).png" alt="Single Side Elephant" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Zardozi</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Single Side Elephant</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Intricately embroidered Zardozi elephant, available in vibrant Red, Green, or Blue.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹380</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Single%20Side%20Elephant" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Single Side Camel -->
+    <article class="product-card card reveal" data-category="zardozi" style="animation-delay:0.1s"
+      data-detail="The camel is the quintessential symbol of Rajasthan — patient, resilient, and majestic. This single-sided Zardozi ornament captures the full silhouette of a decorated camel with a saddle and tassels, embroidered with golden zari thread and tiny mirrors on a sandy beige velvet base. Approx. 9 × 7 cm. Padded and finished with a hanging ribbon.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Green and gold camel ornament.png" alt="Single Side Camel" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Zardozi</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Single Side Camel</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Classic Rajasthani camel motif, rendered in shimmering Zardozi metallic threads.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹360</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Single%20Side%20Camel" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Single Side Carrot -->
+    <article class="product-card card reveal" data-category="zardozi" style="animation-delay:0.2s"
+      data-detail="A whimsical yet exquisite piece — a plump, cheerful carrot crafted in Zardozi embroidery on orange velvet with gold-thread leaf tips, sequin highlights, and a fabric loop for hanging. Originally designed for international Christmas markets. Approx. 6 × 10 cm including leaves. Makes an unusual and memorable gift.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Beaded carrot ornament close-up.png" alt="Single Side Carrot" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Zardozi</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Single Side Carrot</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Playful carrot design brought to life with intricate and sparkling Zardozi craft.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹360</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Single%20Side%20Carrot" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Elephant with Trunk -->
+    <article class="product-card card reveal" data-category="zardozi" style="animation-delay:0.0s"
+      data-detail="An elephant with its trunk raised high — a powerful sign of good luck in Indian culture. Embroidered in heavy-gauge gold zari thread on black silk velvet, dimensionally padded for sculptural quality. Sequin-edged border and a satin hanging cord. Approx. 11 × 9 cm. A premium gift choice.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Green and gold elephant ornament.png" alt="Elephant with Trunk" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Zardozi</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Elephant with Trunk</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Detailed elephant with raised trunk, heavily embroidered with authentic gold threads.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹360</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Elephant%20with%20Trunk" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Tiger (Orange) -->
+    <article class="product-card card reveal" data-category="zardozi" style="animation-delay:0.1s"
+      data-detail="India's national animal rendered in fierce Zardozi embroidery on bright orange velvet. The tiger's stripes are picked out in contrasting black zari thread, its eyes accented with tiny glass gems. Backed with felt and padded. Approx. 10 × 8 cm with hanging loop. An ideal gift for wildlife enthusiasts.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Intricate Zardozi elephant ornament close-up.png" alt="Tiger Orange Zardozi" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Zardozi</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Tiger (Orange)</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A fierce orange tiger motif, capturing the spirit of India's wildlife in Zardozi.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹430</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Tiger%20(Orange)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Tuk-tuk -->
+    <article class="product-card card reveal" data-category="zardozi" style="animation-delay:0.2s"
+      data-detail="The iconic Indian auto-rickshaw (tuk-tuk) reimagined as a Zardozi ornament — every arch, wheel spoke, and window panel embroidered with gold and silver threads on sunny yellow or sky blue velvet. A love letter to Indian street life. Approx. 9 × 7 cm with hanging ribbon. A crowd-favourite at international craft fairs.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Beaded auto-rickshaw ornaments in vibrant colours.png" alt="Tuk-tuk Zardozi" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Zardozi</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Tuk-tuk</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A charming Indian auto rickshaw (Tuk-tuk) in yellow or sky blue, hand-embroidered.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹380</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Tuk-tuk" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Coin Purse -->
+    <article class="product-card card reveal" data-category="zardozi" style="animation-delay:0.0s"
+      data-detail="A fully functional zip-top coin purse embroidered with rich Zardozi work on premium velvet. Choose from the Elephant design (gold on teal) or Peacock design (multicolour on black). Inner cotton lining with a small slip pocket. Size: 10 × 8 cm. Sturdy enough for daily use. Each piece takes an artisan 2–3 hours to complete.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/Intricate Zardozi embroidered elephant pouches.png" alt="Zardozi Coin Purse" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Zardozi</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Coin Purse</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Premium Zardozi coin purse adorned with majestic elephant or peacock embroidery.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹660</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Coin%20Purse" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Halloween Design -->
+    <article class="product-card card reveal" data-category="zardozi" style="animation-delay:0.1s"
+      data-detail="Where ancient craft meets contemporary festivity. This Halloween-themed Zardozi piece features a grinning pumpkin, crescent moon, and bat in orange and black metallic threads on midnight-black velvet. Approx. 9 × 8 cm. Originally commissioned for Halloween markets in the UK and US — now one of our bestselling export pieces. A truly unique fusion souvenir.">
+      <div class="card-image-wrap product-img-wrap">
+        <img src="images/items/halloween pumpkin.png" alt="Halloween Zardozi" loading="lazy" />
+        <div class="product-tag"><span class="badge badge-gold">Zardozi</span></div>
+      </div>
+      <div class="product-body">
+        <h2 class="product-name" style="font-size:1.15rem;">Halloween Design</h2>
+        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A unique fusion of traditional Zardozi embroidery with a playful Halloween motif.</p>
+        <div class="product-footer">
+          <div class="product-pricing"><span class="product-price">₹360</span></div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Halloween%20Design" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">Order on WA</a>
+        </div>
+      </div>
+    </article>
+
+  </div><!-- /products-grid -->
+</section>
+
+<!-- ARTISAN BAND -->
+<section class="section artisan-band section--dark">
+  <div class="artisan-band-inner">
+    <div class="artisan-band-text reveal">
+      <div class="section-eyebrow">Meet the Makers</div>
+      <h2 class="section-title">Every Purchase Supports<br/>a Living Tradition</h2>
+      <p class="section-subtitle">When you buy from Mokshita Enterprises, 70% of the price goes directly to the artisan family. We never use middlemen.</p>
+      <a href="contact.html" class="btn btn-outline" style="margin-top:28px;">Learn Our Story</a>
+    </div>
+    <div class="artisan-band-img reveal reveal-delay-2">
+      <img src="images/artisan_working.png" alt="Indian artisan at work" loading="lazy" />
+      <div class="artisan-img-frame" aria-hidden="true"></div>
+      <div class="artisan-stat-pill">
+        <span class="artisan-stat-num">70%</span>
+        <span class="artisan-stat-lbl">Goes to the Artisan</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-grid">
+    <div>
+      <p class="footer-brand-name">Mokshita Enterprises</p>
+      <p class="footer-brand-tagline">Art &amp; Journeys</p>
+      <p class="footer-brand-desc">We connect the world to India's living artisan traditions.</p>
+      <div class="footer-social">
+        <a href="#" class="footer-social-btn" aria-label="Instagram"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg></a>
+        <a href="https://wa.me/918871872924" class="footer-social-btn" aria-label="WhatsApp"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg></a>
+      </div>
+    </div>
+    <div>
+      <p class="footer-col-title">Explore</p>
+      <ul class="footer-links">
+        <li><a href="index.html" class="footer-link">Home</a></li>
+        <li><a href="handicrafts.html" class="footer-link">Handicrafts</a></li>
+        <li><a href="travel.html" class="footer-link">Travel</a></li>
+        <li><a href="contact.html" class="footer-link">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Contact</p>
+      <ul class="footer-links">
+        <li><a href="mailto:mokshitaenterprises2024@gmail.com" class="footer-link">mokshitaenterprises2024@gmail.com</a></li>
+        <li><a href="tel:+918871872924" class="footer-link">+91-8871872924</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; 2025 Mokshita Enterprises. All rights reserved.</p>
+    <ul class="footer-bottom-links" role="list">
+      <li><a href="#" class="footer-bottom-link">Privacy Policy</a></li>
+      <li><a href="#" class="footer-bottom-link">Terms of Use</a></li>
+    </ul>
+  </div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════════
+     FULL-SCREEN IMMERSIVE PRODUCT MODAL
+     ═══════════════════════════════════════════════════════ -->
+<div id="product-modal" class="product-modal" role="dialog" aria-modal="true" aria-label="Product details">
+  <div class="modal-backdrop" id="modal-backdrop"></div>
+
+  <div class="modal-drawer" id="modal-drawer">
+
+    <!-- ── Close button (top-right, always visible) ────── -->
+    <button class="modal-close" id="modal-close" aria-label="Close">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+
+    <!-- ══ LEFT — Image Panel (60%) ══════════════════════ -->
+    <div class="modal-img-wrap" id="modal-img-wrap">
+
+      <!-- Main large image -->
+      <div class="modal-img-main" id="modal-img-main">
+        <img id="modal-img" src="" alt="" class="modal-img" />
+        <!-- Category badge -->
+        <div id="modal-category-badge" class="modal-category-badge"></div>
+        <!-- Variants pill -->
+        <div id="modal-variants-pill" class="modal-variants-pill"></div>
+        <!-- Gallery navigation arrows -->
+        <button class="modal-gallery-arrow modal-gallery-prev" id="modal-gallery-prev" aria-label="Previous image">&#8249;</button>
+        <button class="modal-gallery-arrow modal-gallery-next" id="modal-gallery-next" aria-label="Next image">&#8250;</button>
+      </div>
+
+      <!-- Thumbnail strip (hidden unless multi-image) -->
+      <div class="modal-thumbs" id="modal-thumbs"></div>
+
+    </div>
+
+    <!-- ══ RIGHT — Info Panel (40%) ═════════════════════ -->
+    <div class="modal-body">
+      <div class="modal-eyebrow">Mokshita Enterprises</div>
+      <h2 id="modal-title" class="modal-title"></h2>
+      <div class="modal-divider"></div>
+      <p id="modal-desc" class="modal-desc"></p>
+
+      <div class="modal-meta-row">
+        <div class="modal-price-wrap">
+          <span class="modal-price-label">Price</span>
+          <span id="modal-price" class="modal-price"></span>
+        </div>
+        <div class="modal-origin-wrap">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          <span>Agra, India</span>
+        </div>
+      </div>
+
+      <div class="modal-actions">
+        <a id="modal-buy-btn" href="#" target="_blank" class="btn btn-primary modal-wa-btn">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347"/></svg>
+          Order on WhatsApp
+        </a>
+        <a href="contact.html" class="btn btn-outline modal-enquire-btn">Enquire</a>
+      </div>
+
+      <div class="modal-trust-row">
+        <div class="modal-trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <span>Handmade by master artisans</span>
+        </div>
+        <div class="modal-trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          <span>Worldwide shipping available</span>
+        </div>
+        <div class="modal-trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Authenticity guaranteed</span>
+        </div>
+        <div class="modal-trust-item">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v13H3z"/><path d="M8 21h8M12 17v4"/></svg>
+          <span>Supports artisan families directly</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script src="main.js"></script>
+<script>
+  /* ── Filter ── */
+  const filterBtns   = document.querySelectorAll('.filter-btn');
+  const productCards = document.querySelectorAll('.product-card[data-category]');
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const filter = btn.dataset.filter;
+      productCards.forEach(card => {
+        const match = filter === 'all' || card.dataset.category === filter;
+        card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+        if (match) {
+          card.style.opacity = '1';
+          card.style.transform = '';
+          card.style.display = '';
+        } else {
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            if (btn.dataset.filter !== 'all' && card.dataset.category !== btn.dataset.filter)
+              card.style.display = 'none';
+          }, 300);
+        }
+      });
+    });
+  });
+
+  /* ── Search ── */
+  const searchInput = document.getElementById('product-search');
+  if (searchInput) {
+    searchInput.addEventListener('input', e => {
+      const term = e.target.value.toLowerCase();
+      filterBtns.forEach(b => b.classList.remove('active'));
+      const allBtn = document.getElementById('filter-all');
+      if (allBtn) allBtn.classList.add('active');
+      document.querySelectorAll('.product-card').forEach(card => {
+        const name = card.querySelector('.product-name').textContent.toLowerCase();
+        const desc = (card.dataset.detail || card.querySelector('.product-desc').textContent).toLowerCase();
+        if (name.includes(term) || desc.includes(term)) {
+          card.style.display = '';
+          setTimeout(() => { card.style.opacity = '1'; card.style.transform = ''; }, 10);
+        } else {
+          card.style.opacity = '0';
+          card.style.transform = 'scale(0.95)';
+          setTimeout(() => { card.style.display = 'none'; }, 300);
+        }
+      });
+    });
+  }
+
+  /* ── Card Slider ── */
+  document.querySelectorAll('.card-slider').forEach(slider => {
+    const slides = slider.querySelectorAll('.card-slide');
+    const dots   = slider.querySelectorAll('.cs-dot');
+    const prev   = slider.querySelector('.cs-arrow--prev');
+    const next   = slider.querySelector('.cs-arrow--next');
+    let current  = 0;
+
+    function goTo(n) {
+      slides[current].classList.remove('active');
+      dots[current].classList.remove('active');
+      current = (n + slides.length) % slides.length;
+      slides[current].classList.add('active');
+      dots[current].classList.add('active');
+    }
+
+    dots.forEach((dot, i) => {
+      dot.addEventListener('click', e => { e.stopPropagation(); goTo(i); });
+    });
+    if (prev) prev.addEventListener('click', e => { e.stopPropagation(); goTo(current - 1); });
+    if (next) next.addEventListener('click', e => { e.stopPropagation(); goTo(current + 1); });
+
+    /* Auto-advance every 3s */
+    setInterval(() => goTo(current + 1), 3000);
+  });
+
+  /* ══════════════════════════════════════════════════════
+     FULL-SCREEN IMMERSIVE PRODUCT MODAL — JS
+     ══════════════════════════════════════════════════════ */
+  const modal          = document.getElementById('product-modal');
+  const modalClose     = document.getElementById('modal-close');
+  const modalBack      = document.getElementById('modal-backdrop');
+  const modalImg       = document.getElementById('modal-img');
+  const modalTitle     = document.getElementById('modal-title');
+  const modalDesc      = document.getElementById('modal-desc');
+  const modalPrice     = document.getElementById('modal-price');
+  const modalBuyBtn    = document.getElementById('modal-buy-btn');
+  const modalBadge     = document.getElementById('modal-category-badge');
+  const modalVariants  = document.getElementById('modal-variants-pill');
+  const modalThumbs    = document.getElementById('modal-thumbs');
+  const modalPrev      = document.getElementById('modal-gallery-prev');
+  const modalNext      = document.getElementById('modal-gallery-next');
+
+  /* Gallery state */
+  let galleryImages = [];
+  let galleryIndex  = 0;
+
+  /* Switch to a specific gallery index */
+  function galleryGoTo(idx) {
+    galleryIndex = (idx + galleryImages.length) % galleryImages.length;
+
+    /* Crossfade the main image */
+    modalImg.style.opacity = '0';
+    modalImg.style.transform = 'scale(1.04)';
+    setTimeout(() => {
+      modalImg.src = galleryImages[galleryIndex].src;
+      modalImg.alt = galleryImages[galleryIndex].alt;
+      modalImg.style.opacity = '1';
+      modalImg.style.transform = 'scale(1)';
+    }, 180);
+
+    /* Update active thumbnail */
+    modalThumbs.querySelectorAll('.modal-thumb').forEach((t, i) => {
+      t.classList.toggle('active', i === galleryIndex);
+    });
+  }
+
+  function openModal(card) {
+    const name   = card.querySelector('.product-name').textContent;
+    const detail = card.dataset.detail || card.querySelector('.product-desc').textContent;
+    const price  = card.querySelector('.product-price').textContent;
+    const badge  = card.querySelector('.badge') ? card.querySelector('.badge').textContent : '';
+    const waBtn  = card.querySelector('.product-btn');
+
+    /* ── Collect all images from card ── */
+    const sliderImgs = card.querySelectorAll('.card-slide');
+    const singleImg  = card.querySelector('.product-img-wrap > img, .product-img-wrap img:not(.card-slide)');
+
+    galleryImages = [];
+    if (sliderImgs.length > 0) {
+      sliderImgs.forEach(img => galleryImages.push({ src: img.src, alt: img.alt }));
+    } else if (singleImg) {
+      galleryImages.push({ src: singleImg.src, alt: singleImg.alt });
+    }
+    galleryIndex = 0;
+
+    /* ── Set text content ── */
+    modalTitle.textContent = name;
+    modalDesc.textContent  = detail;
+    modalPrice.textContent = price;
+    modalBadge.textContent = badge;
+    if (waBtn) modalBuyBtn.href = waBtn.href;
+
+    /* ── Set initial image with transition ── */
+    modalImg.style.transition = 'none';
+    modalImg.style.opacity = '1';
+    modalImg.style.transform = 'scale(1)';
+    modalImg.src = galleryImages[0].src;
+    modalImg.alt = galleryImages[0].alt;
+
+    /* ── Multi-image gallery controls ── */
+    const isMulti = galleryImages.length > 1;
+
+    /* Variants pill */
+    modalVariants.textContent = isMulti ? galleryImages.length + ' variants available' : '';
+    modalVariants.classList.toggle('visible', isMulti);
+
+    /* Thumbnail strip */
+    modalThumbs.innerHTML = '';
+    if (isMulti) {
+      galleryImages.forEach((img, i) => {
+        const thumb = document.createElement('button');
+        thumb.className = 'modal-thumb' + (i === 0 ? ' active' : '');
+        thumb.innerHTML = `<img src="${img.src}" alt="${img.alt}" loading="lazy" />`;
+        thumb.addEventListener('click', () => galleryGoTo(i));
+        modalThumbs.appendChild(thumb);
+      });
+    }
+    modalThumbs.classList.toggle('visible', isMulti);
+
+    /* Arrows */
+    [modalPrev, modalNext].forEach(btn => btn.classList.toggle('visible', isMulti));
+
+    /* Restore image transition */
+    setTimeout(() => { modalImg.style.transition = 'opacity 0.35s ease, transform 0.7s ease'; }, 50);
+
+    /* ── Show modal ── */
+    modal.classList.add('show');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    modal.classList.remove('show');
+    document.body.style.overflow = '';
+  }
+
+  /* Arrow listeners */
+  if (modalPrev) modalPrev.addEventListener('click', () => galleryGoTo(galleryIndex - 1));
+  if (modalNext) modalNext.addEventListener('click', () => galleryGoTo(galleryIndex + 1));
+
+  /* Card click-to-open */
+  document.querySelectorAll('.product-card').forEach(card => {
+    card.addEventListener('click', e => {
+      if (e.target.closest('.product-btn') || e.target.closest('.cs-arrow') || e.target.closest('.cs-dot')) return;
+      openModal(card);
+    });
+  });
+
+  /* Close interactions */
+  if (modalClose) modalClose.addEventListener('click', closeModal);
+  if (modalBack)  modalBack.addEventListener('click', closeModal);
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+
+</body>
+</html>
