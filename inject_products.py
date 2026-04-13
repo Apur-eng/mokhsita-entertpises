@@ -23,36 +23,36 @@ text = re.sub(
 
 products = [
     # Paintings
-    ("Taj Mahal Watercolour (A5)", "₹600", "painting", "Exquisite hand-painted Taj Mahal watercolour on A5 archival paper, bringing the monument of love to life.", "https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=600&q=80"),
-    ("Pichwai Art (A5)", "₹650", "painting", "Devotional paintings depicting Lord Krishna's life, crafted on handwoven cotton cloth with natural pigments.", "https://images.unsplash.com/photo-1617791160536-598cf32026fb?w=600&q=80"),
-    ("Watercolour Mini (2.5×6 inch)", "₹300", "painting", "Delicate miniature-inspired watercolours, perfect for elegant home decor and gifting.", "https://images.unsplash.com/photo-1580136579312-94651dfd596d?w=600&q=80"),
+    ("Taj Mahal Watercolour (A5)", "₹600", "painting", "Exquisite hand-painted Taj Mahal watercolour on A5 archival paper, bringing the monument of love to life.", "images/items/watercolourtajmahal1.jpeg"),
+    ("Pichwai Art (A5)", "₹650", "painting", "Devotional paintings depicting Lord Krishna's life, crafted on handwoven cotton cloth with natural pigments.", "images/items/pichwai art3.jpeg"),
+    ("Watercolour Mini (2.5×6 inch)", "₹300", "painting", "Delicate miniature-inspired watercolours, perfect for elegant home decor and gifting.", "images/items/watercolourpaint3.jpeg"),
 
     # Marble & Decor
-    ("Marble Tortoise (Inlay Work, 2.5\")", "₹430", "marble", "Finely carved Makrana marble tortoise with authentic pietra dura stone inlay work.", "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&q=80"),
-    ("Marble Coaster Plates (5\")", "₹750", "marble", "Set of elegant 5-inch Makrana marble coasters featuring intricate floral inlay patterns.", "https://images.unsplash.com/photo-1590736969955-71cc94901144?w=600&q=80"),
+    ("Marble Tortoise (Inlay Work, 2.5\")", "₹430", "marble", "Finely carved Makrana marble tortoise with authentic pietra dura stone inlay work.", "images/items/Handcrafted marble plates with floral design (1).png"),
+    ("Marble Coaster Plates (5\")", "₹750", "marble", "Set of elegant 5-inch Makrana marble coasters featuring intricate floral inlay patterns.", "images/items/Handcrafted marble plates with floral design (1).png"),
 
     # Wooden Items
-    ("Wooden Dice", "₹370", "wooden", "Hand-carved premium wooden dice set, polished to a smooth, natural finish.", "https://images.unsplash.com/photo-1577083165350-14b4f5146bd2?w=600&q=80"),
-    ("Wooden Ganesha (2\")", "₹310", "wooden", "A beautifully detailed 2-inch wooden carving of Lord Ganesha, perfect for your altar or desk.", "https://images.unsplash.com/photo-1577083165350-14b4f5146bd2?w=600&q=80"),
+    ("Wooden Dice", "₹370", "wooden", "Hand-carved premium wooden dice set, polished to a smooth, natural finish.", "images/items/Wooden dice and wooden die holder.jpg.jpeg"),
+    ("Wooden Ganesha (2\")", "₹310", "wooden", "A beautifully detailed 2-inch wooden carving of Lord Ganesha, perfect for your altar or desk.", "images/items/Handcrafted Ganesha idol on white background.png"),
 
     # Crochet Items
-    ("Crochet Doll (Multicolour)", "₹750", "crochet", "Lovingly handcrafted multicolour crochet doll, made from pure cotton yarn.", "https://images.unsplash.com/photo-1606722590583-6951b5ea92ad?w=600&q=80"),
-    ("Crochet Turtle (Multicolour)", "₹350", "crochet", "A vibrant, soft multicolour crochet turtle, showcasing intricate thread artistry.", "https://images.unsplash.com/photo-1606722590583-6951b5ea92ad?w=600&q=80"),
-    ("Crochet Sunflower Keyring", "₹250", "crochet", "A bright and cheerful sunflower crochet keyring, perfect as an everyday accessory.", "https://images.unsplash.com/photo-1606722590583-6951b5ea92ad?w=600&q=80"),
+    ("Crochet Doll (Multicolour)", "₹750", "crochet", "Lovingly handcrafted multicolour crochet doll, made from pure cotton yarn.", "images/items/Handmade crochet doll with vibrant yarn details.png"),
+    ("Crochet Turtle (Multicolour)", "₹350", "crochet", "A vibrant, soft multicolour crochet turtle, showcasing intricate thread artistry.", "images/items/Crochet turtles side by side.png"),
+    ("Crochet Sunflower Keyring", "₹250", "crochet", "A bright and cheerful sunflower crochet keyring, perfect as an everyday accessory.", "images/items/Sunflower.jpg.jpeg"),
 
     # Textile & Pouches
-    ("Hand-painted Elephant Pouch", "₹550", "textile", "A premium fabric pouch featuring delicate hand-painted elephant motifs and fine stitching.", "https://images.unsplash.com/photo-1605367067838-8e657c93cb66?w=600&q=80"),
+    ("Hand-painted Elephant Pouch", "₹550", "textile", "A premium fabric pouch featuring delicate hand-painted elephant motifs and fine stitching.", "images/items/Vibrant folk-art elephant pouch design.png"),
 
     # Zardozi Collection
-    ("Double Side Elephant (Mehroon)", "₹480", "zardozi", "Mehroon Zardozi elephant ornament with traditional metallic embroidery on both sides.", "https://images.unsplash.com/photo-1602410769352-7e0aade607d7?w=600&q=80"),
-    ("Single Side Elephant", "₹380", "zardozi", "Intricately embroidered Zardozi elephant, available in vibrant Red, Green, or Blue.", "https://images.unsplash.com/photo-1602410769352-7e0aade607d7?w=600&q=80"),
-    ("Single Side Camel", "₹360", "zardozi", "Classic Rajasthani camel motif, rendered in shimmering Zardozi metallic threads.", "https://images.unsplash.com/photo-1602410769352-7e0aade607d7?w=600&q=80"),
-    ("Single Side Carrot", "₹360", "zardozi", "Playful carrot design brought to life with intricate and sparkling Zardozi craft.", "https://images.unsplash.com/photo-1602410769352-7e0aade607d7?w=600&q=80"),
-    ("Elephant with Trunk", "₹360", "zardozi", "Detailed elephant with raised trunk, heavily embroidered with authentic gold threads.", "https://images.unsplash.com/photo-1602410769352-7e0aade607d7?w=600&q=80"),
-    ("Tiger (Orange)", "₹430", "zardozi", "A fierce orange tiger motif, capturing the spirit of India's wildlife in Zardozi.", "https://images.unsplash.com/photo-1602410769352-7e0aade607d7?w=600&q=80"),
-    ("Tuk-tuk", "₹380", "zardozi", "A charming Indian auto rickshaw (Tuk-tuk) in yellow or sky blue, hand-embroidered.", "https://images.unsplash.com/photo-1602410769352-7e0aade607d7?w=600&q=80"),
-    ("Coin Purse", "₹660", "zardozi", "Premium Zardozi coin purse adorned with majestic elephant or peacock embroidery.", "https://images.unsplash.com/photo-1605367067838-8e657c93cb66?w=600&q=80"),
-    ("Halloween Design", "₹360", "zardozi", "A unique fusion of traditional Zardozi embroidery with a playful Halloween motif.", "https://images.unsplash.com/photo-1602410769352-7e0aade607d7?w=600&q=80"),
+    ("Double Side Elephant (Mehroon)", "₹480", "zardozi", "Mehroon Zardozi elephant ornament with traditional metallic embroidery on both sides.", "images/items/Intricate Zardozi elephant ornament on velvet.png"),
+    ("Single Side Elephant", "₹380", "zardozi", "Intricately embroidered Zardozi elephant, available in vibrant Red, Green, or Blue.", "images/items/Red Elephant( Zardozi).png"),
+    ("Single Side Camel", "₹360", "zardozi", "Classic Rajasthani camel motif, rendered in shimmering Zardozi metallic threads.", "images/items/Green and gold camel ornament.png"),
+    ("Single Side Carrot", "₹360", "zardozi", "Playful carrot design brought to life with intricate and sparkling Zardozi craft.", "images/items/Beaded carrot ornament close-up.png"),
+    ("Elephant with Trunk", "₹360", "zardozi", "Detailed elephant with raised trunk, heavily embroidered with authentic gold threads.", "images/items/Green and gold elephant ornament.png"),
+    ("Tiger (Orange)", "₹430", "zardozi", "A fierce orange tiger motif, capturing the spirit of India's wildlife in Zardozi.", "images/items/Intricate Zardozi embroidered elephant pouches.png"),
+    ("Tuk-tuk", "₹380", "zardozi", "A charming Indian auto rickshaw (Tuk-tuk) in yellow or sky blue, hand-embroidered.", "images/items/Beaded auto-rickshaw ornaments in vibrant colours.png"),
+    ("Coin Purse", "₹660", "zardozi", "Premium Zardozi coin purse adorned with majestic elephant embroidery.", "images/items/Intricate Zardozi embroidered elephant pouches.png"),
+    ("Halloween Design", "₹360", "zardozi", "A unique fusion of traditional Zardozi embroidery with a playful Halloween motif.", "images/items/halloween pumpkin.png"),
 ]
 
 cards_html = ""
