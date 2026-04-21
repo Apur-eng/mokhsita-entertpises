@@ -11,96 +11,8 @@
   <link rel="stylesheet" href="subpage.css" />
   <link rel="stylesheet" href="handicrafts.css" />
   <style>
-    /* ── Card Image Consistent Sizing ── */
-    .product-img-wrap img {
-      width: 100%;
-      height: 240px;
-      object-fit: cover;
-      object-position: center;
-      display: block;
-    }
-
-    /* ── Card Slider ── */
-    .card-slider {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      height: 240px;
-      background: #f4f0e8;
-    }
-    .card-slides {
-      position: relative;
-      width: 100%;
-      height: 100%;
-    }
-    .card-slide {
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      opacity: 0;
-      transition: opacity 0.5s ease;
-    }
-    .card-slide.active { opacity: 1; }
-
-    /* Dot navigation */
-    .card-slider-dots {
-      position: absolute;
-      bottom: 10px;
-      left: 50%;
-      transform: translateX(-50%);
-      display: flex;
-      gap: 6px;
-      z-index: 5;
-    }
-    .cs-dot {
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.5);
-      border: none;
-      cursor: pointer;
-      transition: background 0.2s, transform 0.2s;
-      padding: 0;
-    }
-    .cs-dot.active {
-      background: var(--amber, #c9a84c);
-      transform: scale(1.3);
-    }
-
-    /* Arrow navigation */
-    .cs-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      background: rgba(0,0,0,0.35);
-      color: #fff;
-      border: none;
-      width: 28px; height: 28px;
-      border-radius: 50%;
-      font-size: 1.2rem;
-      line-height: 1;
-      cursor: pointer;
-      z-index: 5;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transition: opacity 0.2s;
-    }
-    .card-slider:hover .cs-arrow { opacity: 1; }
-    .cs-arrow--prev { left: 8px; }
-    .cs-arrow--next { right: 8px; }
-    .cs-arrow:hover { background: rgba(0,0,0,0.6); }
-
-    /* Hover zoom for regular images */
-    .product-img-wrap img {
-      transition: transform 0.5s ease;
-    }
-    .product-card:hover .product-img-wrap img {
-      transform: scale(1.05);
-    }
+    /* ── Stale-card compatibility: no-ops for missing old classes ── */
+    .open-modal-btn { cursor: default; }
   </style>
 </head>
 <body>
@@ -117,7 +29,7 @@
   </a>
   <ul class="nav-links" role="list">
     <li><a href="index.html" class="nav-link">Home</a></li>
-    <li><a href="handicrafts.html" class="nav-link">Handicrafts</a></li>
+    <li><a href="handicrafts.html" class="nav-link active-tab">Handicrafts</a></li>
     <li><a href="travel.html" class="nav-link">Travel</a></li>
     <li><a href="contact.html" class="nav-link">Contact</a></li>
   </ul>
@@ -128,7 +40,7 @@
 </nav>
 <div class="mobile-menu" id="mobile-menu">
   <a href="index.html" class="nav-link">Home</a>
-  <a href="handicrafts.html" class="nav-link">Handicrafts</a>
+  <a href="handicrafts.html" class="nav-link active-tab">Handicrafts</a>
   <a href="travel.html" class="nav-link">Travel</a>
   <a href="contact.html" class="nav-link">Contact</a>
   <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">Plan Your Journey</a>
@@ -151,448 +63,335 @@
   </div>
 </header>
 
-<!-- FILTER BAR -->
-<div class="filter-bar section--cream" id="filter-bar">
-  <div class="search-container reveal">
-    <svg class="search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
-    <input type="text" id="product-search" class="search-input" placeholder="Search crafts (e.g. Pichwai, Marble)..." aria-label="Search" />
-  </div>
-  <div class="filter-inner">
-    <button class="filter-btn active" data-filter="all" id="filter-all">All Crafts</button>
-    <button class="filter-btn" data-filter="painting" id="filter-painting">Paintings</button>
-    <button class="filter-btn" data-filter="marble" id="filter-marble">Marble & Decor</button>
-    <button class="filter-btn" data-filter="wooden" id="filter-wooden">Wooden Items</button>
-    <button class="filter-btn" data-filter="crochet" id="filter-crochet">Crochet</button>
-    <button class="filter-btn" data-filter="textile" id="filter-textile">Textile & Pouches</button>
-    <button class="filter-btn" data-filter="zardozi" id="filter-zardozi">Zardozi</button>
-  </div>
-</div>
+<!-- ════════════════════════════════════════════════════════
+     SHOP PAGE WRAPPER 
+     ════════════════════════════════════════════════════════ -->
+<section class="shop-page-wrapper" id="products">
+  
+  <!-- LEFT SIDEBAR -->
+  <aside class="shop-sidebar">
+    <!-- Category Filter -->
+    <div class="sidebar-section">
+      <h3 class="sidebar-title">Categories</h3>
+      <ul class="sidebar-list">
+        <li><button class="sidebar-link btn-category active" data-filter="all">All Crafts</button></li>
+        <li><button class="sidebar-link btn-category" data-filter="painting">Paintings</button></li>
+        <li><button class="sidebar-link btn-category" data-filter="marble">Marble & Decor</button></li>
+        <li><button class="sidebar-link btn-category" data-filter="wooden">Wooden Items</button></li>
+        <li><button class="sidebar-link btn-category" data-filter="crochet">Crochet</button></li>
+        <li><button class="sidebar-link btn-category" data-filter="textile">Textile & Pouches</button></li>
+        <li><button class="sidebar-link btn-category" data-filter="zardozi">Zardozi</button></li>
+      </ul>
+    </div>
 
-<!-- PRODUCT GRID -->
-<section class="section section--cream" id="products">
-  <div class="products-grid" id="products-grid">
+    <!-- Price Range Filter -->
+    <div class="sidebar-section">
+      <h3 class="sidebar-title">Price Range</h3>
+      <ul class="sidebar-list">
+        <li><button class="sidebar-link btn-price active" data-price="all"><span class="custom-checkbox"></span>All Prices</button></li>
+        <li><button class="sidebar-link btn-price" data-price="under-400"><span class="custom-checkbox"></span>Under ₹400</button></li>
+        <li><button class="sidebar-link btn-price" data-price="400-600"><span class="custom-checkbox"></span>₹400 - ₹600</button></li>
+        <li><button class="sidebar-link btn-price" data-price="above-600"><span class="custom-checkbox"></span>Above ₹600</button></li>
+      </ul>
+    </div>
+  </aside>
 
-    <article class="product-card card reveal" data-category="painting" style="animation-delay: 0.0s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/watercolourtajmahal1.jpeg" alt="Taj Mahal Watercolour (A5)" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Painting</span>
-        </div>
+  <!-- RIGHT MAIN -->
+  <main class="shop-main">
+    
+    <!-- Modern Search -->
+    <div class="modern-search-wrap">
+      <div class="modern-search-inner">
+        <svg class="modern-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        <input type="text" id="product-search" class="modern-search-input" placeholder="Search crafts (e.g. Pichwai, Marble)..." aria-label="Search" />
       </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Taj Mahal Watercolour (A5)</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Exquisite hand-painted Taj Mahal watercolour on A5 archival paper, bringing the monument of love to life.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹600</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Taj%20Mahal%20Watercolour%20(A5)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
-        </div>
-      </div>
-    </article>
+    </div>
 
-    <article class="product-card card reveal" data-category="painting" style="animation-delay: 0.1s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/pichwai art3.jpeg" alt="Pichwai Art (A5)" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Painting</span>
-        </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Pichwai Art (A5)</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Devotional paintings depicting Lord Krishna's life, crafted on handwoven cotton cloth with natural pigments.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹650</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Pichwai%20Art%20(A5)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
-        </div>
-      </div>
-    </article>
+    <!-- Products Grid -->
+    <div class="shop-products-grid" id="products-grid">
 
-    <article class="product-card card reveal" data-category="painting" style="animation-delay: 0.2s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/watercolourpaint3.jpeg" alt="Watercolour Mini (2.5×6 inch)" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Painting</span>
+      <article class="premium-market-card reveal" data-category="painting" data-price="600" style="animation-delay: 0.0s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/watercolourtajmahal1.jpeg" alt="Taj Mahal Watercolour (A5)" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Watercolour Mini (2.5×6 inch)</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Delicate miniature-inspired watercolours, perfect for elegant home decor and gifting.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹300</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Watercolour%20Mini%20(2.5×6%20inch)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Painting</span>
+          <h2 class="market-card-title">Taj Mahal Watercolour (A5)</h2>
+          <p class="market-card-desc">Exquisite hand-painted Taj Mahal watercolour on A5 archival paper, bringing the monument of love to life.</p>
+          <div class="market-card-price">₹600</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Taj%20Mahal%20Watercolour%20(A5)" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="marble" style="animation-delay: 0.0s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Handcrafted marble plates with floral design (1).png" alt="Marble Tortoise (Inlay Work, 2.5")" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Marble</span>
+      <article class="premium-market-card reveal" data-category="painting" data-price="650" style="animation-delay: 0.1s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/pichwai art3.jpeg" alt="Pichwai Art (A5)" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Marble Tortoise (Inlay Work, 2.5")</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Finely carved Makrana marble tortoise with authentic pietra dura stone inlay work.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹430</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Marble%20Tortoise%20(Inlay%20Work,%202.5")" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Painting</span>
+          <h2 class="market-card-title">Pichwai Art (A5)</h2>
+          <p class="market-card-desc">Devotional paintings depicting Lord Krishna's life, crafted on handwoven cotton cloth with natural pigments.</p>
+          <div class="market-card-price">₹650</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Pichwai%20Art%20(A5)" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="marble" style="animation-delay: 0.1s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Handcrafted marble plates with floral design (1).png" alt="Marble Coaster Plates (5")" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Marble</span>
+      <article class="premium-market-card reveal" data-category="painting" data-price="300" style="animation-delay: 0.2s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/watercolourpaint3.jpeg" alt="Watercolour Mini" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Marble Coaster Plates (5")</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Set of elegant 5-inch Makrana marble coasters featuring intricate floral inlay patterns.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹750</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Marble%20Coaster%20Plates%20(5")" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Painting</span>
+          <h2 class="market-card-title">Watercolour Mini (2.5×6 inch)</h2>
+          <p class="market-card-desc">Delicate miniature-inspired watercolours, perfect for elegant home decor and gifting.</p>
+          <div class="market-card-price">₹300</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Watercolour%20Mini" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="wooden" style="animation-delay: 0.2s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Wooden dice and wooden die holder.jpg.jpeg" alt="Wooden Dice" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Wooden</span>
+      <article class="premium-market-card reveal" data-category="marble" data-price="430" style="animation-delay: 0.0s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Handcrafted marble plates with floral design (1).png" alt="Marble Tortoise" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Wooden Dice</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Hand-carved premium wooden dice set, polished to a smooth, natural finish.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹370</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Wooden%20Dice" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Marble</span>
+          <h2 class="market-card-title">Marble Tortoise (Inlay Work, 2.5")</h2>
+          <p class="market-card-desc">Finely carved Makrana marble tortoise with authentic pietra dura stone inlay work.</p>
+          <div class="market-card-price">₹430</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Marble%20Tortoise" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="wooden" style="animation-delay: 0.0s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Handcrafted Ganesha idol on white background.png" alt="Wooden Ganesha (2")" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Wooden</span>
+      <article class="premium-market-card reveal" data-category="marble" data-price="750" style="animation-delay: 0.1s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Handcrafted marble plates with floral design (1).png" alt="Marble Coaster Plates" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Wooden Ganesha (2")</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A beautifully detailed 2-inch wooden carving of Lord Ganesha, perfect for your altar or desk.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹310</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Wooden%20Ganesha%20(2")" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Marble</span>
+          <h2 class="market-card-title">Marble Coaster Plates (5")</h2>
+          <p class="market-card-desc">Set of elegant 5-inch Makrana marble coasters featuring intricate floral inlay patterns.</p>
+          <div class="market-card-price">₹750</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Marble%20Coaster%20Plates" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="crochet" style="animation-delay: 0.1s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Handmade crochet doll with vibrant yarn details.png" alt="Crochet Doll (Multicolour)" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Crochet</span>
+      <article class="premium-market-card reveal" data-category="wooden" data-price="370" style="animation-delay: 0.2s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Wooden dice and wooden die holder.jpg.jpeg" alt="Wooden Dice" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Crochet Doll (Multicolour)</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Lovingly handcrafted multicolour crochet doll, made from pure cotton yarn.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹750</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Crochet%20Doll%20(Multicolour)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Wooden</span>
+          <h2 class="market-card-title">Wooden Dice</h2>
+          <p class="market-card-desc">Hand-carved premium wooden dice set, polished to a smooth, natural finish.</p>
+          <div class="market-card-price">₹370</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Wooden%20Dice" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="crochet" style="animation-delay: 0.2s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Crochet turtles side by side.png" alt="Crochet Turtle (Multicolour)" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Crochet</span>
+      <article class="premium-market-card reveal" data-category="wooden" data-price="310" style="animation-delay: 0.0s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Handcrafted Ganesha idol on white background.png" alt="Wooden Ganesha" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Crochet Turtle (Multicolour)</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A vibrant, soft multicolour crochet turtle, showcasing intricate thread artistry.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹350</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Crochet%20Turtle%20(Multicolour)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Wooden</span>
+          <h2 class="market-card-title">Wooden Ganesha (2")</h2>
+          <p class="market-card-desc">A beautifully detailed 2-inch wooden carving of Lord Ganesha, perfect for your altar or desk.</p>
+          <div class="market-card-price">₹310</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Wooden%20Ganesha" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="crochet" style="animation-delay: 0.0s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Sunflower.jpg.jpeg" alt="Crochet Sunflower Keyring" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Crochet</span>
+      <article class="premium-market-card reveal" data-category="crochet" data-price="750" style="animation-delay: 0.1s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Handmade crochet doll with vibrant yarn details.png" alt="Crochet Doll" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Crochet Sunflower Keyring</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A bright and cheerful sunflower crochet keyring, perfect as an everyday accessory.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹250</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Crochet%20Sunflower%20Keyring" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Crochet</span>
+          <h2 class="market-card-title">Crochet Doll (Multicolour)</h2>
+          <p class="market-card-desc">Lovingly handcrafted multicolour crochet doll, made from pure cotton yarn.</p>
+          <div class="market-card-price">₹750</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Crochet%20Doll" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="textile" style="animation-delay: 0.1s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Vibrant folk-art elephant pouch design.png" alt="Hand-painted Elephant Pouch" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Textile</span>
+      <article class="premium-market-card reveal" data-category="crochet" data-price="350" style="animation-delay: 0.2s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Crochet turtles side by side.png" alt="Crochet Turtle" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Hand-painted Elephant Pouch</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A premium fabric pouch featuring delicate hand-painted elephant motifs and fine stitching.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹550</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Hand-painted%20Elephant%20Pouch" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Crochet</span>
+          <h2 class="market-card-title">Crochet Turtle (Multicolour)</h2>
+          <p class="market-card-desc">A vibrant, soft multicolour crochet turtle, showcasing intricate thread artistry.</p>
+          <div class="market-card-price">₹350</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Crochet%20Turtle" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="zardozi" style="animation-delay: 0.2s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Intricate Zardozi elephant ornament on velvet.png" alt="Double Side Elephant (Mehroon)" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Zardozi</span>
+      <article class="premium-market-card reveal" data-category="crochet" data-price="250" style="animation-delay: 0.0s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Sunflower.jpg.jpeg" alt="Crochet Sunflower Keyring" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Double Side Elephant (Mehroon)</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Mehroon Zardozi elephant ornament with traditional metallic embroidery on both sides.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹480</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Double%20Side%20Elephant%20(Mehroon)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Crochet</span>
+          <h2 class="market-card-title">Crochet Sunflower Keyring</h2>
+          <p class="market-card-desc">A bright and cheerful sunflower crochet keyring, perfect as an everyday accessory.</p>
+          <div class="market-card-price">₹250</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Crochet%20Sunflower%20Keyring" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="zardozi" style="animation-delay: 0.0s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Red Elephant( Zardozi).png" alt="Single Side Elephant" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Zardozi</span>
+      <article class="premium-market-card reveal" data-category="textile" data-price="550" style="animation-delay: 0.1s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Vibrant folk-art elephant pouch design.png" alt="Hand-painted Elephant Pouch" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Single Side Elephant</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Intricately embroidered Zardozi elephant, available in vibrant Red, Green, or Blue.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹380</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Single%20Side%20Elephant" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Textile</span>
+          <h2 class="market-card-title">Hand-painted Elephant Pouch</h2>
+          <p class="market-card-desc">A premium fabric pouch featuring delicate hand-painted elephant motifs and fine stitching.</p>
+          <div class="market-card-price">₹550</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Hand-painted%20Elephant%20Pouch" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="zardozi" style="animation-delay: 0.1s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Green and gold camel ornament.png" alt="Single Side Camel" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Zardozi</span>
+      <article class="premium-market-card reveal" data-category="zardozi" data-price="480" style="animation-delay: 0.2s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Intricate Zardozi elephant ornament on velvet.png" alt="Double Side Elephant" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Single Side Camel</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Classic Rajasthani camel motif, rendered in shimmering Zardozi metallic threads.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹360</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Single%20Side%20Camel" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Zardozi</span>
+          <h2 class="market-card-title">Double Side Elephant (Mehroon)</h2>
+          <p class="market-card-desc">Mehroon Zardozi elephant ornament with traditional metallic embroidery on both sides.</p>
+          <div class="market-card-price">₹480</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Double%20Side%20Elephant" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="zardozi" style="animation-delay: 0.2s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Beaded carrot ornament close-up.png" alt="Single Side Carrot" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Zardozi</span>
+      <article class="premium-market-card reveal" data-category="zardozi" data-price="380" style="animation-delay: 0.0s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Red Elephant( Zardozi).png" alt="Single Side Elephant" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Single Side Carrot</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Playful carrot design brought to life with intricate and sparkling Zardozi craft.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹360</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Single%20Side%20Carrot" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Zardozi</span>
+          <h2 class="market-card-title">Single Side Elephant</h2>
+          <p class="market-card-desc">Intricately embroidered Zardozi elephant, available in vibrant Red, Green, or Blue.</p>
+          <div class="market-card-price">₹380</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Single%20Side%20Elephant" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="zardozi" style="animation-delay: 0.0s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Green and gold elephant ornament.png" alt="Elephant with Trunk" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Zardozi</span>
+      <article class="premium-market-card reveal" data-category="zardozi" data-price="360" style="animation-delay: 0.1s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Green and gold camel ornament.png" alt="Single Side Camel" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Elephant with Trunk</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Detailed elephant with raised trunk, heavily embroidered with authentic gold threads.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹360</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Elephant%20with%20Trunk" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Zardozi</span>
+          <h2 class="market-card-title">Single Side Camel</h2>
+          <p class="market-card-desc">Classic Rajasthani camel motif, rendered in shimmering Zardozi metallic threads.</p>
+          <div class="market-card-price">₹360</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Single%20Side%20Camel" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="zardozi" style="animation-delay: 0.1s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Intricate Zardozi embroidered elephant pouches.png" alt="Tiger (Orange)" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Zardozi</span>
+      <article class="premium-market-card reveal" data-category="zardozi" data-price="360" style="animation-delay: 0.2s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Beaded carrot ornament close-up.png" alt="Single Side Carrot" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Tiger (Orange)</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A fierce orange tiger motif, capturing the spirit of India's wildlife in Zardozi.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹430</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Tiger%20(Orange)" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Zardozi</span>
+          <h2 class="market-card-title">Single Side Carrot</h2>
+          <p class="market-card-desc">Playful carrot design brought to life with intricate and sparkling Zardozi craft.</p>
+          <div class="market-card-price">₹360</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Single%20Side%20Carrot" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="zardozi" style="animation-delay: 0.2s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Beaded auto-rickshaw ornaments in vibrant colours.png" alt="Tuk-tuk" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Zardozi</span>
+      <article class="premium-market-card reveal" data-category="zardozi" data-price="360" style="animation-delay: 0.0s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Green and gold elephant ornament.png" alt="Elephant with Trunk" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Tuk-tuk</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A charming Indian auto rickshaw (Tuk-tuk) in yellow or sky blue, hand-embroidered.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹380</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Tuk-tuk" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Zardozi</span>
+          <h2 class="market-card-title">Elephant with Trunk</h2>
+          <p class="market-card-desc">Detailed elephant with raised trunk, heavily embroidered with authentic gold threads.</p>
+          <div class="market-card-price">₹360</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Elephant%20with%20Trunk" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="zardozi" style="animation-delay: 0.0s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/Intricate Zardozi embroidered elephant pouches.png" alt="Coin Purse" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Zardozi</span>
+      <article class="premium-market-card reveal" data-category="zardozi" data-price="430" style="animation-delay: 0.1s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Intricate Zardozi embroidered elephant pouches.png" alt="Tiger (Orange)" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Coin Purse</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">Premium Zardozi coin purse adorned with majestic elephant embroidery.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹660</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Coin%20Purse" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Zardozi</span>
+          <h2 class="market-card-title">Tiger (Orange)</h2>
+          <p class="market-card-desc">A fierce orange tiger motif, capturing the spirit of India's wildlife in Zardozi.</p>
+          <div class="market-card-price">₹430</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Tiger%20(Orange)" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-    <article class="product-card card reveal" data-category="zardozi" style="animation-delay: 0.1s">
-      <div class="card-image-wrap product-img-wrap">
-        <img src="images/items/halloween pumpkin.png" alt="Halloween Design" loading="lazy" />
-        <div class="product-tag">
-          <span class="badge badge-gold">Zardozi</span>
+      <article class="premium-market-card reveal" data-category="zardozi" data-price="380" style="animation-delay: 0.2s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Beaded auto-rickshaw ornaments in vibrant colours.png" alt="Tuk-tuk" loading="lazy" />
         </div>
-      </div>
-      <div class="product-body">
-        <h2 class="product-name" style="font-size:1.15rem;">Halloween Design</h2>
-        <p class="product-desc" style="font-size:0.85rem;line-height:1.5;">A unique fusion of traditional Zardozi embroidery with a playful Halloween motif.</p>
-        <div class="product-footer">
-          <div class="product-pricing">
-            <span class="product-price">₹360</span>
-          </div>
-          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Halloween%20Design" target="_blank" class="btn btn-outline btn-sm product-btn" style="padding:6px 14px;font-size:0.7rem;">
-            Order on WA
-          </a>
+        <div class="market-card-body">
+          <span class="market-card-tag">Zardozi</span>
+          <h2 class="market-card-title">Tuk-tuk</h2>
+          <p class="market-card-desc">A charming Indian auto rickshaw (Tuk-tuk) in yellow or sky blue, hand-embroidered.</p>
+          <div class="market-card-price">₹380</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Tuk-tuk" target="_blank" class="market-card-btn">Order on WhatsApp</a>
         </div>
-      </div>
-    </article>
+      </article>
 
-</div>
+      <article class="premium-market-card reveal" data-category="zardozi" data-price="660" style="animation-delay: 0.0s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/Intricate Zardozi embroidered elephant pouches.png" alt="Coin Purse" loading="lazy" />
+        </div>
+        <div class="market-card-body">
+          <span class="market-card-tag">Zardozi</span>
+          <h2 class="market-card-title">Coin Purse</h2>
+          <p class="market-card-desc">Premium Zardozi coin purse adorned with majestic elephant embroidery.</p>
+          <div class="market-card-price">₹660</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Coin%20Purse" target="_blank" class="market-card-btn">Order on WhatsApp</a>
+        </div>
+      </article>
+
+      <article class="premium-market-card reveal" data-category="zardozi" data-price="360" style="animation-delay: 0.1s">
+        <button class="market-card-wishlist" aria-label="Add to wishlist"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>
+        <div class="market-card-img-wrap open-modal-btn">
+          <img src="images/items/halloween pumpkin.png" alt="Halloween Design" loading="lazy" />
+        </div>
+        <div class="market-card-body">
+          <span class="market-card-tag">Zardozi</span>
+          <h2 class="market-card-title">Halloween Design</h2>
+          <p class="market-card-desc">A unique fusion of traditional Zardozi embroidery with a playful Halloween motif.</p>
+          <div class="market-card-price">₹360</div>
+          <a href="https://wa.me/918871872924?text=I'd%20like%20to%20order%20the%20Halloween%20Design" target="_blank" class="market-card-btn">Order on WhatsApp</a>
+        </div>
+      </article>
+
+    </div>
+  </main>
 </section>
 
 <!-- FOOTER -->
@@ -717,31 +516,53 @@
 
 <script src="main.js"></script>
 <script>
-  /* ── Filter ── */
-  const filterBtns   = document.querySelectorAll('.filter-btn');
-  const productCards = document.querySelectorAll('.product-card[data-category]');
+  /* ── Sidebar Filters (Category & Price) ── */
+  const categoryBtns = document.querySelectorAll('.btn-category');
+  const priceBtns = document.querySelectorAll('.btn-price');
+  const productCards = document.querySelectorAll('.premium-market-card');
+  let currentCategory = 'all';
+  let currentPrice = 'all';
 
-  filterBtns.forEach(btn => {
+  function applyFilters() {
+    productCards.forEach(card => {
+      const matchCategory = currentCategory === 'all' || card.dataset.category === currentCategory;
+      const matchPrice = currentPrice === 'all' || card.dataset.price === currentPrice ||
+                         (currentPrice === 'under-400' && parseInt(card.dataset.price) < 400) ||
+                         (currentPrice === '400-600' && parseInt(card.dataset.price) >= 400 && parseInt(card.dataset.price) <= 600) ||
+                         (currentPrice === 'above-600' && parseInt(card.dataset.price) > 600);
+      
+      card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      if (matchCategory && matchPrice) {
+        card.style.opacity = '1';
+        card.style.transform = '';
+        card.classList.remove('hidden');
+      } else {
+        card.style.opacity = '0';
+        card.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          if (!card.style.opacity || card.style.opacity === '0') {
+            card.classList.add('hidden');
+          }
+        }, 300);
+      }
+    });
+  }
+
+  categoryBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      filterBtns.forEach(b => b.classList.remove('active'));
+      categoryBtns.forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      const filter = btn.dataset.filter;
-      productCards.forEach(card => {
-        const match = filter === 'all' || card.dataset.category === filter;
-        card.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
-        if (match) {
-          card.style.opacity = '1';
-          card.style.transform = '';
-          card.style.display = '';
-        } else {
-          card.style.opacity = '0';
-          card.style.transform = 'scale(0.95)';
-          setTimeout(() => {
-            if (btn.dataset.filter !== 'all' && card.dataset.category !== btn.dataset.filter)
-              card.style.display = 'none';
-          }, 300);
-        }
-      });
+      currentCategory = btn.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  priceBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      priceBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      currentPrice = btn.dataset.price;
+      applyFilters();
     });
   });
 
@@ -750,19 +571,32 @@
   if (searchInput) {
     searchInput.addEventListener('input', e => {
       const term = e.target.value.toLowerCase();
-      filterBtns.forEach(b => b.classList.remove('active'));
-      const allBtn = document.getElementById('filter-all');
-      if (allBtn) allBtn.classList.add('active');
-      document.querySelectorAll('.product-card').forEach(card => {
-        const name = card.querySelector('.product-name').textContent.toLowerCase();
-        const desc = (card.dataset.detail || card.querySelector('.product-desc').textContent).toLowerCase();
-        if (name.includes(term) || desc.includes(term)) {
-          card.style.display = '';
+      // Reset filters when searching manually
+      if(term.length > 0) {
+        categoryBtns.forEach(b => b.classList.remove('active'));
+        priceBtns.forEach(b => b.classList.remove('active'));
+        document.querySelector('.btn-category[data-filter="all"]').classList.add('active');
+        document.querySelector('.btn-price[data-price="all"]').classList.add('active');
+        currentCategory = 'all';
+        currentPrice = 'all';
+      }
+
+      productCards.forEach(card => {
+        const name = card.querySelector('.market-card-title').textContent.toLowerCase();
+        const desc = card.querySelector('.market-card-desc').textContent.toLowerCase();
+        const matchCategory = currentCategory === 'all' || card.dataset.category === currentCategory;
+        const matchPrice = currentPrice === 'all' || card.dataset.price === currentPrice ||
+                   (currentPrice === 'under-400' && parseInt(card.dataset.price) < 400) ||
+                   (currentPrice === '400-600' && parseInt(card.dataset.price) >= 400 && parseInt(card.dataset.price) <= 600) ||
+                   (currentPrice === 'above-600' && parseInt(card.dataset.price) > 600);
+
+        if ((name.includes(term) || desc.includes(term)) && matchCategory && matchPrice) {
+          card.classList.remove('hidden');
           setTimeout(() => { card.style.opacity = '1'; card.style.transform = ''; }, 10);
         } else {
           card.style.opacity = '0';
           card.style.transform = 'scale(0.95)';
-          setTimeout(() => { card.style.display = 'none'; }, 300);
+          setTimeout(() => { card.classList.add('hidden'); }, 300);
         }
       });
     });
@@ -908,10 +742,14 @@
   if (modalPrev) modalPrev.addEventListener('click', () => galleryGoTo(galleryIndex - 1));
   if (modalNext) modalNext.addEventListener('click', () => galleryGoTo(galleryIndex + 1));
 
-  /* Card click-to-open */
+  /* Card click-to-open - only triggers on old .product-card elements (not new premium-market-card) */
   document.querySelectorAll('.product-card').forEach(card => {
     card.addEventListener('click', e => {
       if (e.target.closest('.product-btn') || e.target.closest('.cs-arrow') || e.target.closest('.cs-dot')) return;
+      const nameEl  = card.querySelector('.product-name');
+      const descEl  = card.querySelector('.product-desc');
+      const priceEl = card.querySelector('.product-price');
+      if (!nameEl || !priceEl) return; /* guard: skip new-card format */
       openModal(card);
     });
   });
