@@ -919,23 +919,19 @@
     setTimeout(findActive, 60);
   })();
 
-  /* â”€â”€â”€ ARTISAN ROW SCROLL ARROWS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+  /* ─── ARTISAN ROW SCROLL ARROWS ───────────────────────── */
   (function() {
     function initRowScroll(trackId, prevId, nextId) {
       var track = document.getElementById(trackId);
       var prev  = document.getElementById(prevId);
       var next  = document.getElementById(nextId);
       if (!track || !prev || !next) return;
-      var scrollBy = 320;
+      var scrollAmount = 350;
       prev.addEventListener('click', function() { 
-        track.style.scrollSnapType = 'none';
-        track.scrollBy({ left: -scrollBy, behavior: 'smooth' });
-        setTimeout(function() { track.style.scrollSnapType = ''; }, 400);
+        track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
       });
       next.addEventListener('click', function() { 
-        track.style.scrollSnapType = 'none';
-        track.scrollBy({ left: scrollBy, behavior: 'smooth' });
-        setTimeout(function() { track.style.scrollSnapType = ''; }, 400);
+        track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
       });
       var isDown = false, startX = 0, scrollL = 0, dragDist = 0;
       track.addEventListener('mousedown', function(e) {
@@ -962,8 +958,6 @@
     initRowScroll('bs-track', 'bs-prev', 'bs-next');
     initRowScroll('na-track', 'na-prev', 'na-next');
   })();
-
-  /* â”€â”€â”€ ARTISAN WISHLIST TOGGLE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   document.querySelectorAll('.artisan-wishlist').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
       e.stopPropagation();

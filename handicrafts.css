@@ -128,7 +128,7 @@ body {
   min-width: 0; /* allows grid to shrink */
   background:
     linear-gradient(rgba(248, 246, 243, 0.8), rgba(248, 246, 243, 0.8)),
-    url('images/floral2_opt.jpg') center / cover no-repeat;
+    url('images/floral2.png') center / cover no-repeat;
   border-radius: 20px;
   padding: 32px;
   margin: -8px; /* Compensate for added padding */

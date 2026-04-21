@@ -6,8 +6,7 @@
 /* ─── EXPLORE HORIZONTAL CARDS ───────────────────────────── */
 .explore-cards-section {
   padding: 80px 0 72px; /* 80px top matches hero bottom spacing */
-  /* Dark gradient that echoes the hero's cinematic darkness — no harsh break */
-  background: linear-gradient(180deg, #0E0C09 0%, #1A1612 60%, #231E18 100%);
+  background: #f8f6f3; /* very light beige */
   overflow: hidden;
 }
 
@@ -805,6 +804,7 @@
   .hero-content { padding: 0 6% 10vh; }
   .newsletter-form { flex-direction: column; border-radius: var(--r-md); }
   .newsletter-form .btn { border-radius: var(--r-full); margin: 0; padding: 15px; }
+  .artisan-arrow { display: none; }
 }
 @media (max-width: 540px) {
   .products-grid { grid-template-columns: 1fr; }
@@ -1350,8 +1350,8 @@
   position: relative;
   z-index: 1;
 }
-.artisan-row--sage { background: #e2ebe0; }
-.artisan-row--peach { background: #f3ddd0; }
+.artisan-row--sage { background: #f0f4f0; } /* soft sage green tint */
+.artisan-row--peach { background: #fff5f0; } /* soft peach tint */
 
 /* Row header */
 .artisan-row-header {
@@ -1431,28 +1431,27 @@
 /* Arrows — white pill with shadow, accent-color hover */
 .artisan-arrow {
   flex-shrink: 0;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border-radius: 50%;
   background: #fff;
   color: #2f5d50;
-  border: 1.5px solid #e8e5e0;
-  font-size: 1.1rem;
+  border: none;
+  font-size: 1.2rem;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 10;
-  transition: background 0.2s, color 0.2s, transform 0.15s, box-shadow 0.2s;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.12);
+  transition: background 0.2s, color 0.2s, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   user-select: none;
 }
 .artisan-arrow:hover {
   background: #2f5d50;
   color: #fff;
-  border-color: #2f5d50;
-  transform: scale(1.1);
-  box-shadow: 0 6px 20px rgba(47,93,80,0.25);
+  transform: scale(1.05);
+  box-shadow: 0 6px 20px rgba(47,93,80,0.2);
 }
 .artisan-arrow--prev { margin-right: 10px; }
 .artisan-arrow--next { margin-left: 10px; }
@@ -1460,8 +1459,7 @@
 .artisan-arrow--peach:hover {
   background: #c26a3d;
   color: #fff;
-  border-color: #c26a3d;
-  box-shadow: 0 6px 20px rgba(194,106,61,0.25);
+  box-shadow: 0 6px 20px rgba(194,106,61,0.2);
 }
 
 /* ─── PRODUCT CARD ──────────────────────────────────────── */
