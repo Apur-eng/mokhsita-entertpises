@@ -71,8 +71,7 @@
 
   /* ─── FILTER PRODUCTS ──────────────────────────────────── */
   function getFiltered() {
-    const products = window.products || [];
-    if (!products.length) return [];
+    if (typeof products === 'undefined') return [];
 
     return products.filter(p => {
       const price  = parseInt(p.price);
