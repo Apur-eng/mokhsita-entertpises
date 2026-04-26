@@ -242,3 +242,71 @@
   .travel-card-footer { flex-direction: column; align-items: flex-start; }
   .travel-book-btn { width: 100%; justify-content: center; }
 }
+
+/* ─── TRAVEL HERO OVERRIDE ───────────────────────────────── */
+/* Clean single-title hero — no eyebrow clutter */
+.page-hero--travel .page-hero-content {
+  padding: 76px 5% 0;
+}
+.page-hero--travel .page-hero-title {
+  font-size: clamp(2.8rem, 6.5vw, 5.2rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+.page-hero--travel .page-hero-sub {
+  font-size: 1.05rem;
+  letter-spacing: 0.03em;
+  color: rgba(255,255,255,0.75);
+  margin-top: 16px;
+}
+.page-hero--travel .page-hero-overlay {
+  background: linear-gradient(
+    160deg,
+    rgba(12,6,2,0.60) 0%,
+    rgba(40,18,5,0.42) 100%
+  );
+}
+
+/* ─── TRAVEL FOOTER EXTRAS ───────────────────────────────── */
+.travel-footer .footer-top {
+  grid-template-columns: 1.5fr 1fr 1fr 1fr;
+}
+.travel-footer-brand {}
+
+.travel-footer-newsletter {
+  margin-top: 28px;
+  padding-top: 20px;
+  border-top: 1px solid rgba(255,255,255,0.08);
+}
+.travel-footer-nl-label {
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.35);
+  margin-bottom: 12px;
+  font-weight: 600;
+}
+.travel-footer-nl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.82rem;
+  color: var(--terra, #c97a4a);
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+  padding-bottom: 2px;
+  transition: opacity 0.2s;
+}
+.travel-footer-nl-btn:hover { opacity: 0.75; }
+
+@media (max-width: 1024px) {
+  .travel-footer .footer-top {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+@media (max-width: 600px) {
+  .travel-footer .footer-top {
+    grid-template-columns: 1fr;
+  }
+}

@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Product Details — Mokshita Enterprises</title>
+  <meta name="description" content="View product details." />
+  
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  
+  <!-- Core Styles -->
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="product.css" />
+</head>
+<body>
+
+<!-- Loader -->
+<div class="page-loader" id="page-loader">
+  <div class="loader-emblem"></div>
+  <p class="loader-text">Mokshita Enterprises</p>
+</div>
+
+<!-- Navigation -->
+<nav class="nav" id="main-nav" aria-label="Main navigation">
+  <a href="index.html" class="nav-logo">
+    <span class="nav-logo-title">Mokshita Enterprises</span>
+    <span class="nav-logo-sub">Art &amp; Experiences</span>
+  </a>
+  <ul class="nav-links" role="list">
+    <li><a href="index.html"       class="nav-link">Home</a></li>
+    <li><a href="travel.html"      class="nav-link">Travel</a></li>
+    <li><a href="handicrafts.html" class="nav-link active-tab">Art &amp; Collection</a></li>
+    <li><a href="contact.html"     class="nav-link">Contact Us</a></li>
+  </ul>
+  <div style="display:flex; align-items:center; gap:16px;">
+    <a href="cart.html" class="nav-cart">
+      <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+      <span class="cart-badge" style="display:none;">0</span>
+    </a>
+    <a href="contact.html" class="nav-cta">Plan Your Journey</a>
+  </div>
+  <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobile-menu">
+  <a href="index.html"       class="nav-link">Home</a>
+  <a href="travel.html"      class="nav-link">Travel</a>
+  <a href="handicrafts.html" class="nav-link active-tab">Art &amp; Collection</a>
+  <a href="cart.html"        class="nav-link">Cart</a>
+  <a href="contact.html"     class="nav-link">Contact Us</a>
+  <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">Plan Your Journey</a>
+</div>
+
+<!-- Page Background Wrapper -->
+<div class="page-bg-wrapper">
+
+  <!-- Breadcrumbs -->
+  <div class="breadcrumbs-container">
+    <nav class="breadcrumbs" aria-label="Breadcrumb">
+      <ol>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="handicrafts.html">Handicrafts</a></li>
+        <li aria-current="page" id="breadcrumb-title">Loading...</li>
+      </ol>
+    </nav>
+  </div>
+
+  <!-- MAIN PRODUCT SECTION -->
+  <main class="product-main-container">
+    
+    <!-- LEFT: Image Gallery -->
+    <div class="product-gallery">
+      <div class="gallery-main-view">
+        <img id="main-product-img" src="" alt="Main Image" />
+        <button class="gallery-zoom-btn" aria-label="Zoom image">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+        </button>
+      </div>
+      <div class="gallery-thumbs" id="gallery-thumbs">
+        <!-- Thumbnails injected via JS -->
+      </div>
+    </div>
+
+    <!-- RIGHT: Product Info -->
+    <div class="product-info-panel">
+      
+      <div class="product-category-tag" id="pdp-category">Category</div>
+      <h1 class="product-title" id="pdp-title">Loading...</h1>
+      
+      <div class="product-rating-row">
+        <div class="stars" id="pdp-stars">
+          <!-- Stars injected via JS -->
+        </div>
+        <span class="rating-text" id="pdp-reviews">0 (0 Reviews)</span>
+        <span class="stock-badge">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+          Authentic Artisan Piece
+        </span>
+      </div>
+
+      <div class="product-price-row">
+        <span class="price-current" id="pdp-price">₹0</span>
+        <span class="price-old" id="pdp-old-price" style="display:none;"></span>
+        <span class="price-discount" id="pdp-discount" style="display:none;"></span>
+      </div>
+
+      <p class="product-short-desc" id="pdp-desc">
+        Loading description...
+      </p>
+
+      <div class="product-origin" id="pdp-origin">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        <span>Loading origin...</span>
+      </div>
+
+      <div class="buy-module">
+        <div class="quantity-selector">
+          <span class="qty-label">Quantity</span>
+          <div class="qty-controls">
+            <button class="qty-btn" aria-label="Decrease quantity" id="btn-qty-minus">−</button>
+            <input type="number" value="1" min="1" class="qty-input" id="qty-input" aria-label="Quantity" />
+            <button class="qty-btn" aria-label="Increase quantity" id="btn-qty-plus">+</button>
+          </div>
+        </div>
+
+        <div class="primary-actions">
+          <button class="btn-add-cart" id="btn-add-cart">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+            Add to Cart
+          </button>
+          <a href="#" target="_blank" class="btn-whatsapp" id="btn-buy-whatsapp">Buy Now</a>
+        </div>
+
+        <div class="action-buttons">
+          <button class="btn-wishlist">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            Find a Store
+          </button>
+          <button class="btn-wishlist">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+            Add to Wishlist
+          </button>
+        </div>
+      </div>
+
+      <!-- Artisan Story Block -->
+      <div class="artisan-story-block">
+        <h3 class="story-heading">About the Craft</h3>
+        <ul class="story-list">
+          <li>
+            <div class="story-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg></div>
+            <div class="story-text"><strong>Handmade by local artisans</strong>, keeping generations of artistry alive.</div>
+          </li>
+          <li>
+            <div class="story-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></div>
+            <div class="story-text"><strong>Premium materials</strong> sourced ethically, ensuring vibrant, lasting colors.</div>
+          </li>
+          <li>
+            <div class="story-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 19V6M5 12l7-7 7 7"/></svg></div>
+            <div class="story-text"><strong>Traditional technique</strong> passed down through centuries, creating a truly unique collectible.</div>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- LOWER SECTION: Tabs & Reviews -->
+  <section class="product-lower-section">
+    <div class="lower-grid">
+      
+      <!-- Tabs Area -->
+      <div class="product-tabs-area">
+        <div class="tab-headers">
+          <button class="tab-btn active" data-target="tab-details">Details</button>
+          <button class="tab-btn" data-target="tab-materials">Materials</button>
+          <button class="tab-btn" data-target="tab-care">Care Guide</button>
+        </div>
+        
+        <div class="tab-content-container">
+          <div class="tab-pane active" id="tab-details">
+            <p id="pdp-tab-desc">This product tells a story of devotion and heritage. It is meticulously crafted and not just a decoration, but a piece of Indian history brought into your home.</p>
+          </div>
+          <div class="tab-pane" id="tab-materials">
+            <p>We source only the finest materials to ensure longevity and vibrancy. Handcrafted by experts.</p>
+          </div>
+          <div class="tab-pane" id="tab-care">
+            <p>To preserve the beauty of your item:</p>
+            <ul class="details-list">
+              <li>Keep away from direct, harsh sunlight and high humidity.</li>
+              <li>Handle with clean, dry hands.</li>
+              <li>Do not wipe with wet cloths; dust gently with a soft, dry brush if necessary.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Reviews Area -->
+      <div class="product-reviews-area">
+        <h3 class="reviews-heading">Ratings &amp; Reviews</h3>
+        <div class="reviews-summary">
+          <div class="score-box">
+            <span class="score-number" id="review-score">4.9</span>
+            <span class="score-max">/ 5</span>
+            <p class="score-total" id="review-count">(0 Reviews)</p>
+          </div>
+          <div class="score-bars">
+            <div class="bar-row">
+              <span class="star-label">5 <svg viewBox="0 0 24 24" width="12" height="12" fill="#E8B031"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+              <div class="bar-track"><div class="bar-fill" style="width: 85%"></div></div>
+            </div>
+            <div class="bar-row">
+              <span class="star-label">4 <svg viewBox="0 0 24 24" width="12" height="12" fill="#E8B031"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></span>
+              <div class="bar-track"><div class="bar-fill" style="width: 12%"></div></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-list">
+          <div class="review-item">
+            <div class="review-stars">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B031"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B031"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B031"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B031"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B031"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <h4 class="review-title">Absolutely beautiful piece</h4>
+            <p class="review-text">The craftsmanship is beyond expectations. It fits perfectly in my living room and the colors are so vibrant.</p>
+            <div class="review-meta">
+              <span class="review-author">Sarah M.</span>
+              <span class="review-date">3 days ago</span>
+            </div>
+          </div>
+          <div class="review-item">
+            <div class="review-stars">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B031"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B031"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B031"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#E8B031"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="#E5E0D8"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+            </div>
+            <h4 class="review-title">Great quality</h4>
+            <p class="review-text">Really happy with the quality, though shipping took a little longer than expected. Will buy again!</p>
+            <div class="review-meta">
+              <span class="review-author">Rajesh K.</span>
+              <span class="review-date">1 week ago</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RELATED PRODUCTS -->
+  <section class="related-products-section">
+    <h2 class="section-title">You May Also Like</h2>
+    <div class="related-grid" id="related-grid">
+      <!-- Injected via JS -->
+    </div>
+  </section>
+
+</div> <!-- End Page Background Wrapper -->
+
+<!-- FOOTER -->
+<footer class="footer" role="contentinfo">
+  <div class="footer-grid">
+    <div>
+      <p class="footer-brand-name">Mokshita Enterprises</p>
+      <p class="footer-brand-tagline">Art &amp; Journeys</p>
+      <p class="footer-brand-desc">We connect the world to India's living artisan traditions.</p>
+    </div>
+    <div>
+      <p class="footer-col-title">Explore</p>
+      <ul class="footer-links">
+        <li><a href="index.html" class="footer-link">Home</a></li>
+        <li><a href="handicrafts.html" class="footer-link">Handicrafts</a></li>
+        <li><a href="travel.html" class="footer-link">Travel</a></li>
+        <li><a href="contact.html" class="footer-link">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <p class="footer-col-title">Contact</p>
+      <ul class="footer-links">
+        <li><a href="mailto:mokshitaenterprises2024@gmail.com" class="footer-link">mokshitaenterprises2024@gmail.com</a></li>
+        <li><a href="tel:+918871872924" class="footer-link">+91-8871872924</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p class="footer-copy">&copy; 2025 Mokshita Enterprises. All rights reserved.</p>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabaseClient.js"></script>
+<script src="main.js"></script>
+<script src="products.js"></script>
+<script src="cart.js"></script>
+<script src="supabase-products.js"></script>
+<script>
+  /* Product Detail Page - dynamic load from Supabase or local fallback */
+  'use strict';
+
+  function findProduct(productId) {
+    const all = window.products || [];
+    return all.find(p =>
+      p.id === productId ||
+      String(p.dbId) === productId ||
+      (p.title && p.title.toLowerCase() === productId.toLowerCase().trim())
+    );
+  }
+
+  function renderPDP(product) {
+    if (!product) {
+      document.getElementById('pdp-title').innerText = 'Product not found.';
+      return;
+    }
+
+    document.title = product.title + ' — Mokshita Enterprises';
+    document.getElementById('breadcrumb-title').innerText = product.title;
+    document.getElementById('pdp-title').innerText = product.title;
+    document.getElementById('pdp-category').innerText = product.tag || product.category || '';
+    document.getElementById('pdp-price').innerText = '₹' + product.price;
+
+    if (product.oldPrice) {
+      document.getElementById('pdp-old-price').innerText = '₹' + product.oldPrice;
+      document.getElementById('pdp-old-price').style.display = 'inline-block';
+    }
+    if (product.discount) {
+      document.getElementById('pdp-discount').innerText = product.discount;
+      document.getElementById('pdp-discount').style.display = 'inline-block';
+    }
+
+    document.getElementById('pdp-desc').innerText = product.shortDesc || product.description || '';
+    document.getElementById('pdp-tab-desc').innerText = product.shortDesc || product.description || '';
+    document.getElementById('pdp-origin').innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> <span>' + (product.origin || 'India') + '</span>';
+
+    const pRating  = (product.rating  != null && !isNaN(Number(product.rating)))  ? Number(product.rating)  : null;
+    const pReviews = (product.reviews != null && !isNaN(Number(product.reviews))) ? Math.round(Number(product.reviews)) : null;
+    const ratingEl  = document.getElementById('pdp-reviews');
+    const scoreEl   = document.getElementById('review-score');
+    const countEl   = document.getElementById('review-count');
+    const ratingRow = ratingEl ? ratingEl.closest('.product-rating-row') : null;
+    if (pRating !== null && pRating > 0) {
+      const ratingStr = pRating.toFixed(1);
+      if (scoreEl) scoreEl.innerText = ratingStr;
+      if (ratingEl) ratingEl.innerText = ratingStr + (pReviews ? ' (' + pReviews + ' Reviews)' : '');
+      if (countEl)  countEl.innerText  = pReviews ? '(' + pReviews + ' Reviews)' : '';
+    } else {
+      if (ratingRow) ratingRow.style.display = 'none';
+    }
+
+    const starsEl = document.getElementById('pdp-stars');
+    if (starsEl) {
+      if (pRating !== null && pRating > 0) {
+        const fullCount = Math.floor(pRating);
+        const hasHalf   = (pRating - fullCount) >= 0.4;
+        let starsHTML = '';
+        for (let i = 0; i < fullCount; i++) starsHTML += '<svg viewBox="0 0 24 24" fill="#E8B031" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+        if (hasHalf) starsHTML += '<svg viewBox="0 0 24 24" stroke="none"><defs><linearGradient id="hsg"><stop offset="50%" stop-color="#E8B031"/><stop offset="50%" stop-color="#E5E0D8"/></linearGradient></defs><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2" fill="url(#hsg)"/></svg>';
+        starsEl.innerHTML = starsHTML;
+      } else {
+        starsEl.innerHTML = '';
+      }
+    }
+
+    const mainImg = document.getElementById('main-product-img');
+    mainImg.src = product.mainImage || '';
+    const thumbsContainer = document.getElementById('gallery-thumbs');
+    thumbsContainer.innerHTML = '';
+    (product.thumbnails || (product.mainImage ? [product.mainImage] : [])).forEach(function(thumb, idx) {
+      thumbsContainer.innerHTML += '<button class="thumb-btn ' + (idx === 0 ? 'active' : '') + '" data-src="' + thumb + '"><img src="' + thumb + '" alt="Thumbnail ' + (idx+1) + '" /></button>';
+    });
+    document.querySelectorAll('.thumb-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.thumb-btn').forEach(function(t) { t.classList.remove('active'); });
+        btn.classList.add('active');
+        mainImg.style.opacity = '0.5';
+        setTimeout(function() { mainImg.src = btn.dataset.src; mainImg.style.opacity = '1'; }, 150);
+      });
+    });
+
+    const relatedGrid = document.getElementById('related-grid');
+    relatedGrid.innerHTML = '';
+    const allProds = window.products || [];
+    allProds.filter(function(p) { return p.id !== product.id; }).sort(function() { return 0.5 - Math.random(); }).slice(0, 4).forEach(function(rel) {
+      relatedGrid.innerHTML += '<article class="premium-market-card" onclick="window.location.href=\'product.html?id=' + rel.id + '\'" style="cursor:pointer;"><div class="market-card-img-wrap"><img src="' + rel.mainImage + '" alt="' + rel.title + '" loading="lazy" /></div><div class="market-card-body"><span class="market-card-tag">' + (rel.tag || rel.category || '') + '</span><h2 class="market-card-title">' + rel.title + '</h2><div class="market-card-price">₹' + rel.price + '</div></div></article>';
+    });
+
+    const qtyInput = document.getElementById('qty-input');
+    const addCartBtn = document.getElementById('btn-add-cart');
+    const cartProductId = product.dbId || product.id;
+    addCartBtn.onclick = function() {
+      const qty = parseInt(qtyInput.value) || 1;
+      addToCart(cartProductId, qty);
+    };
+    document.getElementById('btn-qty-minus').onclick = function() {
+      const val = parseInt(qtyInput.value) || 1;
+      if (val > 1) qtyInput.value = val - 1;
+    };
+    document.getElementById('btn-qty-plus').onclick = function() {
+      qtyInput.value = (parseInt(qtyInput.value) || 1) + 1;
+    };
+
+    const waBuy = document.getElementById('btn-buy-whatsapp');
+    if (waBuy) {
+      const waMsg = encodeURIComponent('Hello! I\'d like to buy: ' + product.title + ' (₹' + product.price + ')');
+      waBuy.href = 'https://wa.me/918871872924?text=' + waMsg;
+    }
+  }
+
+  function initPDP() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id') || 'taj-mahal-watercolour';
+    const product = findProduct(productId);
+    renderPDP(product);
+
+    document.querySelectorAll('.tab-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('.tab-btn').forEach(function(b) { b.classList.remove('active'); });
+        document.querySelectorAll('.tab-pane').forEach(function(p) { p.classList.remove('active'); });
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.target).classList.add('active');
+      });
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded', initPDP);
+  document.addEventListener('productsLoaded', function() {
+    const urlParams = new URLSearchParams(window.location.search);
+    const productId = urlParams.get('id') || 'taj-mahal-watercolour';
+    const product = findProduct(productId);
+    if (product) renderPDP(product);
+  });
+</script>
+
+</body>
+</html>
