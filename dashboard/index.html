@@ -5,7 +5,37 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin - Order Management</title>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../styles.css" />
+    <style>
+        /* Base resets for standalone dashboard */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: #f7f4ef; }
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 40px; height: 72px;
+            background: rgba(247,244,239,0.95); backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(194,106,61,0.15);
+        }
+        .nav-logo { text-decoration: none; }
+        .nav-logo-title { display: block; font-family: 'Lora', serif; font-size: 1.1rem; color: #2b332f; font-weight: 600; }
+        .nav-logo-sub { display: block; font-size: 0.75rem; color: #6a7d75; letter-spacing: 0.5px; }
+        .nav-cta {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 10px 22px; border-radius: 50px;
+            background: #c26a3d; color: #fff;
+            font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 500;
+            text-decoration: none; transition: background 0.2s;
+        }
+        .nav-cta:hover { background: #a85530; }
+        .checkout-btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 28px; border-radius: 50px; border: none; cursor: pointer;
+            background: #c26a3d; color: #fff;
+            font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500;
+            transition: background 0.2s;
+        }
+        .checkout-btn:hover { background: #a85530; }
+    </style>
     <style>
         .admin-container {
             max-width: 1200px;
@@ -201,7 +231,17 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../supabaseClient.js"></script>
+<script>
+  // Supabase client — inlined so dashboard works as a standalone deployment
+  (function() {
+    const SUPABASE_URL = 'https://txnckfkaecrqwooiobhs.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4bmNrZmthZWNycXdvb2lvYmhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxMjAyOTQsImV4cCI6MjA5MjY5NjI5NH0.CcD0x_MXDhsW3kFahF7l3C10MejS8YAffaPgBFtLXZ4';
+    if (!window.supabaseClient && window.supabase && window.supabase.createClient) {
+      window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+      console.log('[Supabase] Dashboard client initialized.');
+    }
+  })();
+</script>
 <script src="admin_orders.js"></script>
 
 </body>
