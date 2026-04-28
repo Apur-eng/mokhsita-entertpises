@@ -56,9 +56,18 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (error) throw error;
         
-        loginMsg.textContent = "Successfully logged in!";
+        if (typeof window.syncGuestCart === 'function') {
+          await window.syncGuestCart();
+        }
+
+        loginMsg.textContent = "Successfully logged in! Redirecting…";
         loginMsg.classList.add('success');
-        // Page UI will update via auth listener
+        
+        const urlParams = new URLSearchParams(window.location.search);
+        const redirectUrl = urlParams.get('redirect') || 'account.html';
+        
+        // Redirect to account page
+        setTimeout(() => { window.location.replace(redirectUrl); }, 800);
         
       } catch (err) {
         loginMsg.textContent = err.message;
@@ -124,9 +133,15 @@ document.addEventListener('DOMContentLoaded', () => {
     updateAuthUI(session);
   });
   
-  // Check initial session
+  // Check initial session — redirect to account if already logged in
   supabase.auth.getSession().then(({ data: { session } }) => {
-    updateAuthUI(session);
+    if (session) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const redirectUrl = urlParams.get('redirect') || 'account.html';
+      window.location.replace(redirectUrl);
+    } else {
+      updateAuthUI(session);
+    }
   });
 
   function updateAuthUI(session) {

@@ -409,8 +409,14 @@
 
     const waBuy = document.getElementById('btn-buy-whatsapp');
     if (waBuy) {
-      const waMsg = encodeURIComponent('Hello! I\'d like to buy: ' + product.title + ' (₹' + product.price + ')');
-      waBuy.href = 'https://wa.me/918871872924?text=' + waMsg;
+      waBuy.href = '#';
+      waBuy.removeAttribute('target');
+      waBuy.onclick = function(e) {
+        e.preventDefault();
+        const qty = parseInt(qtyInput.value) || 1;
+        addToCart(cartProductId, qty);
+        window.location.href = 'cart.html';
+      };
     }
   }
 

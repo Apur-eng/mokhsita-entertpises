@@ -99,7 +99,11 @@ const statsObserver = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.5 });
 
-document.querySelectorAll('[data-target]').forEach(el => statsObserver.observe(el));
+document.querySelectorAll('[data-target][data-suffix], .stat-number[data-target]').forEach(el => {
+  // Only observe elements whose data-target is a numeric stat counter, not tab buttons
+  const val = parseInt(el.dataset.target, 10);
+  if (!isNaN(val)) statsObserver.observe(el);
+});
 
 /* ─── ACTIVE NAV LINK ────────────────────────────────────── */
 const currentPage = window.location.pathname.split('/').pop() || 'index.html';

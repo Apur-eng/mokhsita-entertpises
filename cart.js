@@ -97,6 +97,77 @@ async function getOrCreateCart(userId) {
   return cart.id;
 }
 
+// ── Sync Guest Cart ──────────────────────────────────────────
+async function syncGuestCart() {
+  const local = JSON.parse(localStorage.getItem('mokshita_cart') || '[]');
+  if (!local || local.length === 0) return;
+
+  const db = window.supabaseClient;
+  if (!db) return;
+
+  const { data: { session } } = await db.auth.getSession();
+  if (!session) return;
+
+  try {
+    const cartId = await getOrCreateCart(session.user.id);
+    
+    // For each local item, add/update in Supabase
+    for (const item of local) {
+      let actualProductId = item.id;
+      if (typeof actualProductId === 'string' && actualProductId.includes(':')) {
+        actualProductId = actualProductId.split(':')[0];
+      }
+      const productData = (window.products || []).find(p => p.id === actualProductId || p.dbId === actualProductId);
+      if (productData && productData.dbId) {
+        actualProductId = productData.dbId;
+      }
+
+      const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+      if (!uuidRegex.test(actualProductId)) {
+        console.error('[Cart] Skipping guest cart sync for non-UUID product:', actualProductId);
+        continue;
+      }
+
+      const { data: existing } = await db
+        .from('cart_items')
+        .select('id, quantity')
+        .eq('cart_id', cartId)
+        .eq('product_id', actualProductId)
+        .maybeSingle();
+
+      if (existing) {
+        await db.from('cart_items')
+          .update({ quantity: existing.quantity + item.quantity })
+          .eq('id', existing.id);
+      } else {
+        const { error: insertErr } = await db.from('cart_items')
+          .insert([{ cart_id: cartId, product_id: actualProductId, quantity: item.quantity }]);
+          
+        if (insertErr) {
+          if (insertErr.code === '23505') {
+            const { data: retryExisting } = await db.from('cart_items')
+              .select('id, quantity').eq('cart_id', cartId).eq('product_id', actualProductId).maybeSingle();
+            if (retryExisting) {
+              await db.from('cart_items')
+                .update({ quantity: retryExisting.quantity + item.quantity })
+                .eq('id', retryExisting.id);
+            }
+          } else {
+             console.error('[Cart] syncGuestCart insert error:', insertErr);
+          }
+        }
+      }
+    }
+
+    // Clear local cart after successful sync
+    localStorage.removeItem('mokshita_cart');
+    await updateCartUI();
+  } catch (err) {
+    console.error('[Cart] Sync error:', err);
+  }
+}
+window.syncGuestCart = syncGuestCart;
+
 // ── Add To Cart ──────────────────────────────────────────────
 async function addToCart(productId, quantity = 1) {
   const db = window.supabaseClient;
@@ -107,6 +178,22 @@ async function addToCart(productId, quantity = 1) {
 
       if (session) {
         // ── Authenticated flow: write to Supabase ──
+        let actualProductId = productId;
+        if (typeof actualProductId === 'string' && actualProductId.includes(':')) {
+            actualProductId = actualProductId.split(':')[0];
+        }
+        const productData = (window.products || []).find(p => p.id === actualProductId || p.dbId === actualProductId);
+        if (productData && productData.dbId) {
+            actualProductId = productData.dbId;
+        }
+
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        if (!uuidRegex.test(actualProductId)) {
+            console.error('[Cart] Cannot add to cart, actualProductId is not a UUID:', actualProductId);
+            showCartToast('Error adding to cart. Product data invalid.', true);
+            return;
+        }
+
         const cartId = await getOrCreateCart(session.user.id);
 
         // Check if this product already exists in cart
@@ -114,13 +201,10 @@ async function addToCart(productId, quantity = 1) {
           .from('cart_items')
           .select('id, quantity')
           .eq('cart_id', cartId)
-          .eq('product_id', productId)
+          .eq('product_id', actualProductId)
           .maybeSingle();
 
-        if (findErr) {
-          console.error('[Cart] addToCart find error:', findErr);
-          throw findErr;
-        }
+        if (findErr) throw findErr;
 
         if (existing) {
           // Product already in cart — increment quantity
@@ -128,31 +212,45 @@ async function addToCart(productId, quantity = 1) {
             .from('cart_items')
             .update({ quantity: existing.quantity + quantity })
             .eq('id', existing.id);
-
-          if (updateErr) {
-            console.error('[Cart] addToCart update error:', updateErr);
-            throw updateErr;
-          }
+          if (updateErr) throw updateErr;
         } else {
           // New item — insert
           const { error: insertErr } = await db
             .from('cart_items')
-            .insert([{ cart_id: cartId, product_id: productId, quantity }]);
-
+            .insert([{ cart_id: cartId, product_id: actualProductId, quantity }]);
+          
           if (insertErr) {
-            console.error('[Cart] addToCart insert error:', insertErr);
-            throw insertErr;
+            if (insertErr.code === '23505') {
+              // Concurrency/Race Condition: It was just inserted by another click
+              const { data: retryExisting } = await db
+                .from('cart_items')
+                .select('id, quantity')
+                .eq('cart_id', cartId)
+                .eq('product_id', actualProductId)
+                .maybeSingle();
+              if (retryExisting) {
+                const { error: retryUpdateErr } = await db
+                  .from('cart_items')
+                  .update({ quantity: retryExisting.quantity + quantity })
+                  .eq('id', retryExisting.id);
+                if (retryUpdateErr) throw retryUpdateErr;
+              }
+            } else {
+              throw insertErr;
+            }
           }
         }
 
-        console.log(`[Cart] Added product ${productId} (qty: ${quantity}) to Supabase cart`);
+        console.log(`[Cart] Added product ${actualProductId} (qty: ${quantity}) to Supabase cart`);
         showCartToast('Added to Cart!');
         await updateCartUI();
+        if (typeof renderCart === 'function') await renderCart();
         return;
       }
     } catch (err) {
-      console.error('[Cart] Supabase write failed, falling back to localStorage:', err);
-      showCartToast('Added to Cart! (offline mode)', false);
+      console.error('[Cart] Authenticated cart error:', err);
+      showCartToast('Error adding to cart. Please try again.', true);
+      return; // Do not fall back to local storage if authenticated request fails
     }
   }
 
@@ -177,15 +275,27 @@ async function removeFromCart(productId) {
     try {
       const { data: { session } } = await db.auth.getSession();
       if (session) {
-        const { data: cartRow } = await db
-          .from('carts').select('id').eq('user_id', session.user.id).maybeSingle();
-        if (cartRow) {
-          const { error } = await db
-            .from('cart_items')
-            .delete()
-            .eq('cart_id', cartRow.id)
-            .eq('product_id', productId);
-          if (error) console.error('[Cart] removeFromCart error:', error);
+        let actualProductId = productId;
+        if (typeof actualProductId === 'string' && actualProductId.includes(':')) {
+          actualProductId = actualProductId.split(':')[0];
+        }
+        const productData = (window.products || []).find(p => p.id === actualProductId || p.dbId === actualProductId);
+        if (productData && productData.dbId) actualProductId = productData.dbId;
+
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        if (uuidRegex.test(actualProductId)) {
+          const { data: cartRow } = await db
+            .from('carts').select('id').eq('user_id', session.user.id).maybeSingle();
+          if (cartRow) {
+            const { error } = await db
+              .from('cart_items')
+              .delete()
+              .eq('cart_id', cartRow.id)
+              .eq('product_id', actualProductId);
+            if (error) console.error('[Cart] removeFromCart error:', error);
+          }
+        } else {
+          console.error('[Cart] removeFromCart: invalid UUID', actualProductId);
         }
         await updateCartUI();
         return;
@@ -214,15 +324,27 @@ async function updateQuantity(productId, quantity) {
     try {
       const { data: { session } } = await db.auth.getSession();
       if (session) {
-        const { data: cartRow } = await db
-          .from('carts').select('id').eq('user_id', session.user.id).maybeSingle();
-        if (cartRow) {
-          const { error } = await db
-            .from('cart_items')
-            .update({ quantity })
-            .eq('cart_id', cartRow.id)
-            .eq('product_id', productId);
-          if (error) console.error('[Cart] updateQuantity error:', error);
+        let actualProductId = productId;
+        if (typeof actualProductId === 'string' && actualProductId.includes(':')) {
+          actualProductId = actualProductId.split(':')[0];
+        }
+        const productData = (window.products || []).find(p => p.id === actualProductId || p.dbId === actualProductId);
+        if (productData && productData.dbId) actualProductId = productData.dbId;
+
+        const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+        if (uuidRegex.test(actualProductId)) {
+          const { data: cartRow } = await db
+            .from('carts').select('id').eq('user_id', session.user.id).maybeSingle();
+          if (cartRow) {
+            const { error } = await db
+              .from('cart_items')
+              .update({ quantity })
+              .eq('cart_id', cartRow.id)
+              .eq('product_id', actualProductId);
+            if (error) console.error('[Cart] updateQuantity error:', error);
+          }
+        } else {
+          console.error('[Cart] updateQuantity: invalid UUID', actualProductId);
         }
         await updateCartUI();
         return;
@@ -246,13 +368,25 @@ window.updateQuantityFallback = async function(productId, change) {
         try {
             const { data: { session } } = await db.auth.getSession();
             if (session) {
-                const { data: cartRow } = await db.from('carts').select('id').eq('user_id', session.user.id).maybeSingle();
-                if (cartRow) {
-                    const { data: existing } = await db.from('cart_items').select('id, quantity').eq('cart_id', cartRow.id).eq('product_id', productId).maybeSingle();
-                    if (existing) {
-                        const newQty = Math.max(1, existing.quantity + change);
-                        await db.from('cart_items').update({ quantity: newQty }).eq('id', existing.id);
+                let actualProductId = productId;
+                if (typeof actualProductId === 'string' && actualProductId.includes(':')) {
+                    actualProductId = actualProductId.split(':')[0];
+                }
+                const productData = (window.products || []).find(p => p.id === actualProductId || p.dbId === actualProductId);
+                if (productData && productData.dbId) actualProductId = productData.dbId;
+
+                const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+                if (uuidRegex.test(actualProductId)) {
+                    const { data: cartRow } = await db.from('carts').select('id').eq('user_id', session.user.id).maybeSingle();
+                    if (cartRow) {
+                        const { data: existing } = await db.from('cart_items').select('id, quantity').eq('cart_id', cartRow.id).eq('product_id', actualProductId).maybeSingle();
+                        if (existing) {
+                            const newQty = Math.max(1, existing.quantity + change);
+                            await db.from('cart_items').update({ quantity: newQty }).eq('id', existing.id);
+                        }
                     }
+                } else {
+                    console.error('[Cart] updateQuantityFallback: invalid UUID', actualProductId);
                 }
                 if(typeof renderCart === 'function') await renderCart();
                 await updateCartUI();
@@ -272,6 +406,21 @@ window.updateQuantityFallback = async function(productId, change) {
 
 // ── Checkout: Cart → Orders ──────────────────────────────────
 window.checkoutToOrderFull = async function(addressData, paymentMethod, subtotal, shippingCost, totalAmount) {
+  // --- ANTI-SPAM & RATE LIMITING ---
+  const lastOrderTime = localStorage.getItem('mokshita_last_order');
+  const now = Date.now();
+  if (lastOrderTime && now - parseInt(lastOrderTime) < 60000) { // 1 min limit
+    return { error: 'Please wait a minute before placing another order.' };
+  }
+  if (addressData.honeypot) {
+    return { error: 'Spam detected.' };
+  }
+
+  // --- STRICT INPUT VALIDATION ---
+  if (!addressData.name || addressData.name.trim().length < 2) return { error: 'Please enter a valid name.' };
+  if (!addressData.phone || !/^[0-9\s\+\-]{10,15}$/.test(addressData.phone)) return { error: 'Please enter a valid phone number.' };
+  if (!addressData.pincode || !/^[0-9]{5,6}$/.test(addressData.pincode)) return { error: 'Please enter a valid 5 or 6 digit pincode.' };
+  
   const db = window.supabaseClient;
   if (!db) return { error: 'No database connection' };
 
@@ -354,6 +503,25 @@ window.checkoutToOrderFull = async function(addressData, paymentMethod, subtotal
     return { error: orderErr.message };
   }
 
+  // Update user profile metadata
+  if (userId) {
+    try {
+      await db.auth.updateUser({
+        data: {
+          full_name: addressData.name,
+          address_line: addressLine,
+          city: addressData.city,
+          state: addressData.state,
+          pincode: addressData.pincode,
+          country: addressData.country,
+          phone: addressData.phone
+        }
+      });
+    } catch (e) {
+      console.warn('[Checkout] Could not update user profile metadata:', e);
+    }
+  }
+
   // Clear cart
   if (userId && cartId) {
     await db.from('cart_items').delete().eq('cart_id', cartId);
@@ -362,6 +530,7 @@ window.checkoutToOrderFull = async function(addressData, paymentMethod, subtotal
   }
 
   console.log('[Checkout] Order created:', newOrder.id, '| Total:', totalAmount);
+  localStorage.setItem('mokshita_last_order', Date.now().toString());
   await updateCartUI();
   return { success: true, orderId: newOrder.id, orderNumber: orderNumber, total: totalAmount };
 }

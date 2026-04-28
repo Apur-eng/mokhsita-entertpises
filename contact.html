@@ -194,6 +194,11 @@
           </label>
         </div>
 
+        <!-- Anti-spam Honeypot -->
+        <div style="display:none;" aria-hidden="true">
+          <input type="text" id="contact-bot-check" name="contact-bot-check" tabindex="-1" autocomplete="off">
+        </div>
+
         <button type="submit" class="btn btn-primary form-submit-btn" id="form-submit">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
           Send Message
@@ -355,6 +360,31 @@
       message: document.getElementById('contact-message').value
     };
 
+    const honeypot = document.getElementById('contact-bot-check');
+    if (honeypot && honeypot.value !== '') {
+      // Spam detected, silently resolve
+      form.querySelectorAll('input,textarea,select,button,.form-privacy').forEach(el => el.style.display = 'none');
+      success.style.display = 'flex';
+      return;
+    }
+
+    const lastLeadTime = localStorage.getItem('mokshita_last_lead');
+    const now = Date.now();
+    if (lastLeadTime && now - parseInt(lastLeadTime) < 60000) { // 1 min limit
+      alert("Please wait a minute before sending another message.");
+      btn.textContent = 'Send Message';
+      btn.disabled = false;
+      return;
+    }
+
+    // Basic regex validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+      alert("Please enter a valid email address.");
+      btn.textContent = 'Send Message';
+      btn.disabled = false;
+      return;
+    }
+
     try {
       if (!window.supabaseClient) {
         throw new Error("Supabase client is not initialized.");
@@ -369,6 +399,7 @@
       
       form.querySelectorAll('input,textarea,select,button,.form-privacy').forEach(el => el.style.display = 'none');
       success.style.display = 'flex';
+      localStorage.setItem('mokshita_last_lead', Date.now().toString());
       
     } catch (err) {
       console.error("Supabase Insert Error:", err);

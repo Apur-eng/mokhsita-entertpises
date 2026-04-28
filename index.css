@@ -1442,11 +1442,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative; /* Ensure z-index works correctly */
   z-index: 10;
   transition: background 0.2s, color 0.2s, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
   user-select: none;
 }
+.artisan-arrow svg { pointer-events: none; }
 .artisan-arrow:hover {
   background: #2f5d50;
   color: #fff;

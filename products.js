@@ -19,7 +19,7 @@ const products = [
     ]
   },
   {
-    id: "pichwai-art-a5",
+    id: "pichwai-art",
     title: "Pichwai Art (A5)",
     category: "painting",
     price: 650,
@@ -71,7 +71,7 @@ const products = [
     ]
   },
   {
-    id: "marble-coaster-plates",
+    id: "coaster-plates",
     title: "Marble Coaster Plates (5\")",
     category: "marble",
     price: 750,
@@ -156,7 +156,7 @@ const products = [
     ]
   },
   {
-    id: "crochet-sunflower",
+    id: "sunflower-keyring",
     title: "Crochet Sunflower Keyring",
     category: "crochet",
     price: 250,
@@ -207,7 +207,7 @@ const products = [
     ]
   },
   {
-    id: "zardozi-single-elephant",
+    id: "zardozi-elephant",
     title: "Single Side Elephant",
     category: "zardozi",
     price: 380,
@@ -224,7 +224,7 @@ const products = [
     ]
   },
   {
-    id: "zardozi-single-camel",
+    id: "zardozi-camel",
     title: "Single Side Camel",
     category: "zardozi",
     price: 360,
@@ -241,7 +241,7 @@ const products = [
     ]
   },
   {
-    id: "zardozi-single-carrot",
+    id: "zardozi-carrot",
     title: "Single Side Carrot",
     category: "zardozi",
     price: 360,
@@ -275,7 +275,7 @@ const products = [
     ]
   },
   {
-    id: "zardozi-tiger-orange",
+    id: "zardozi-tiger",
     title: "Tiger (Orange)",
     category: "zardozi",
     price: 430,

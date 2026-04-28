@@ -158,6 +158,7 @@
     <span class="nav-logo-sub">Admin Panel</span>
   </a>
   <a href="../index.html" class="nav-cta" style="margin-left:auto;">← Back to Site</a>
+  <button id="admin-logout-btn" class="nav-cta" style="margin-left:15px; background: #ab4a3b; border: none; cursor: pointer;">Log Out</button>
 </nav>
 
 <main class="admin-container">
@@ -240,6 +241,27 @@
       window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
       console.log('[Supabase] Dashboard client initialized.');
     }
+
+    // --- Route Protection ---
+    window.addEventListener('DOMContentLoaded', async () => {
+      const { data: { session }, error } = await window.supabaseClient.auth.getSession();
+      if (error || !session) {
+        // No valid session, redirect to login page
+        window.location.replace('login.html');
+      } else {
+        // We have a session, allow access
+        console.log('[Supabase] Admin authenticated as:', session.user.email);
+      }
+    });
+
+    // --- Logout Logic ---
+    document.getElementById('admin-logout-btn').addEventListener('click', async () => {
+      const btn = document.getElementById('admin-logout-btn');
+      btn.textContent = 'Logging out...';
+      btn.disabled = true;
+      await window.supabaseClient.auth.signOut();
+      window.location.replace('login.html');
+    });
   })();
 </script>
 <script src="admin_orders.js"></script>
