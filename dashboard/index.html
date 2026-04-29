@@ -6,7 +6,7 @@
     <title>Admin — Mokshita Enterprises</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="./dashboard.css">
 </head>
 <body>
 
@@ -171,30 +171,39 @@
 </div>
 
 <!-- ══ SCRIPTS ════════════════════════════════════════════════ -->
+<!--
+  Script load order is CRITICAL — do not reorder:
+  1. Supabase CDN library (defines window.supabase)
+  2. supabaseClient.js  (creates window.supabaseClient singleton)
+  3. ui.js              (window.App.UI — no db dependency)
+  4. auth.js            (window.App.Auth — reads window.supabaseClient)
+  5. Inline guard       (calls requireAuth after DOM ready)
+  6. admin_orders.js    (calls window.supabaseClient + loadOrders on DOMContentLoaded)
+-->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../supabaseClient.js"></script>
-<script src="../modules/ui.js"></script>
-<script src="../modules/auth.js"></script>
+<script src="./js/supabaseClient.js"></script>
+<script src="./js/ui.js"></script>
+<script src="./js/auth.js"></script>
 <script>
   (function() {
-    // --- Route Protection (unchanged) ---
-    window.addEventListener('DOMContentLoaded', async () => {
-      const user = await window.App.Auth.requireAuth('login.html');
+    // --- Route Protection ---
+    window.addEventListener('DOMContentLoaded', async function() {
+      var user = await window.App.Auth.requireAuth('login.html');
       if (user) {
-        console.log('[Supabase] Admin authenticated as:', user.email);
+        console.log('[Dashboard] Admin authenticated as:', user.email);
       }
     });
 
-    // --- Logout Logic (unchanged, ID preserved) ---
-    document.getElementById('admin-logout-btn').addEventListener('click', async () => {
-      const btn = document.getElementById('admin-logout-btn');
+    // --- Logout Logic (ID preserved: admin-logout-btn) ---
+    document.getElementById('admin-logout-btn').addEventListener('click', async function() {
+      var btn = document.getElementById('admin-logout-btn');
       btn.textContent = 'Logging out…';
       btn.disabled = true;
       await window.App.Auth.logout('login.html');
     });
   })();
 </script>
-<script src="admin_orders.js"></script>
+<script src="./admin_orders.js"></script>
 
 </body>
 </html>

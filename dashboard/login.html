@@ -6,7 +6,7 @@
     <title>Admin Login — Mokshita Enterprises</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="dashboard.css">
+    <link rel="stylesheet" href="./dashboard.css">
     <style>
         /* Login specific overrides */
         body {
@@ -118,10 +118,17 @@
     </form>
 </div>
 
+<!--
+  Script load order is CRITICAL — do not reorder:
+  1. Supabase CDN (defines window.supabase)
+  2. supabaseClient.js (creates window.supabaseClient)
+  3. ui.js (window.App.UI)
+  4. auth.js (window.App.Auth)
+-->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../supabaseClient.js"></script>
-<script src="../modules/ui.js"></script>
-<script src="../modules/auth.js"></script>
+<script src="./js/supabaseClient.js"></script>
+<script src="./js/ui.js"></script>
+<script src="./js/auth.js"></script>
 <script>
     // Redirect if already logged in
     window.addEventListener('DOMContentLoaded', async () => {
