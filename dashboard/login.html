@@ -3,56 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Login - Mokshita Enterprises</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <title>Admin Login — Mokshita Enterprises</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
     <style>
-        /* Base resets for standalone dashboard */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #f7f4ef; font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-        
+        /* Login specific overrides */
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
         .login-container {
-            background: #fff;
-            padding: 40px;
-            border-radius: 12px;
-            border: 1px solid rgba(194, 106, 61, 0.2);
-            box-shadow: 0 8px 24px rgba(43, 51, 47, 0.08);
+            background: var(--surface);
+            padding: 48px 40px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border-warm);
+            box-shadow: var(--shadow);
             width: 100%;
-            max-width: 400px;
+            max-width: 440px;
+            position: relative;
+            overflow: hidden;
         }
+        .login-container::before {
+            content: '';
+            position: absolute; top: 0; left: 0; right: 0; height: 3px;
+            background: linear-gradient(90deg, var(--gold), var(--terra));
+        }
+        .login-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .login-logo-icon {
+            width: 48px; height: 48px;
+            background: linear-gradient(135deg, var(--terra), var(--gold));
+            border-radius: 12px;
+            display: inline-flex; align-items: center; justify-content: center;
+            font-family: 'Lora', serif; font-size: 1.5rem; font-weight: 600;
+            color: #fff;
+            margin-bottom: 16px;
+        }
+        .login-title { 
+            font-family: 'Lora', serif; font-size: 1.75rem; 
+            color: var(--text-1); margin-bottom: 8px; font-weight: 600;
+        }
+        .login-sub { font-size: 0.9rem; color: var(--text-3); }
 
-        .login-header { text-align: center; margin-bottom: 30px; }
-        .login-title { font-family: 'Lora', serif; font-size: 2rem; color: #2b332f; margin-bottom: 8px; }
-        .login-sub { font-size: 0.9rem; color: #6a7d75; }
-
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; font-weight: 500; color: #2b332f; font-size: 0.9rem; }
+        .form-group { margin-bottom: 24px; }
+        .form-group label { 
+            display: block; margin-bottom: 8px; font-weight: 500; 
+            color: var(--text-2); font-size: 0.85rem; 
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
         .form-group input {
-            width: 100%; padding: 12px 16px;
-            border: 1px solid #ddd; border-radius: 8px;
+            width: 100%; padding: 14px 16px;
+            background: var(--surface-2);
+            border: 1px solid var(--border); 
+            border-radius: var(--radius-sm);
+            color: var(--text-1);
             font-family: 'Inter', sans-serif; font-size: 1rem;
-            transition: border-color 0.2s;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
-        .form-group input:focus { outline: none; border-color: #c26a3d; }
+        .form-group input:focus { 
+            outline: none; 
+            border-color: var(--terra); 
+            box-shadow: 0 0 0 2px rgba(194,106,61,0.2); 
+        }
 
         .btn-submit {
             width: 100%; padding: 14px;
-            background: #c26a3d; color: #fff;
-            border: none; border-radius: 8px;
+            background: var(--terra); color: #fff;
+            border: none; border-radius: 50px;
             font-family: 'Inter', sans-serif; font-size: 1rem; font-weight: 500;
             cursor: pointer; transition: background 0.2s;
+            margin-top: 8px;
         }
-        .btn-submit:hover { background: #a85530; }
-        .btn-submit:disabled { background: #ccc; cursor: not-allowed; }
+        .btn-submit:hover { background: var(--terra-dim); }
+        .btn-submit:disabled { background: var(--surface-3); color: var(--text-3); cursor: not-allowed; }
 
         .error-msg {
-            color: #d32f2f; font-size: 0.85rem; margin-top: 15px; text-align: center; display: none;
+            background: rgba(171,74,59,0.1);
+            border: 1px solid rgba(171,74,59,0.2);
+            color: #f08080; 
+            font-size: 0.85rem; 
+            padding: 12px;
+            border-radius: var(--radius-sm);
+            margin-top: 20px; 
+            text-align: center; 
+            display: none;
         }
     </style>
 </head>
 <body>
 
 <div class="login-container">
-    <div class="login-header">
+    <div class="login-logo">
+        <div class="login-logo-icon">M</div>
         <h1 class="login-title">Admin Login</h1>
         <p class="login-sub">Mokshita Enterprises Dashboard</p>
     </div>
@@ -72,11 +119,14 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../supabaseClient.js"></script>
+<script src="../modules/ui.js"></script>
+<script src="../modules/auth.js"></script>
 <script>
-    // Initialize Supabase Client
-    const SUPABASE_URL = 'https://txnckfkaecrqwooiobhs.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4bmNrZmthZWNycXdvb2lvYmhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxMjAyOTQsImV4cCI6MjA5MjY5NjI5NH0.CcD0x_MXDhsW3kFahF7l3C10MejS8YAffaPgBFtLXZ4';
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // Redirect if already logged in
+    window.addEventListener('DOMContentLoaded', async () => {
+        await window.App.Auth.requireGuest('index.html');
+    });
 
     document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -89,17 +139,19 @@
         btn.disabled = true;
         errorMsg.style.display = 'none';
 
-        const { data, error } = await supabaseClient.auth.signInWithPassword({
+        const { data, error } = await window.supabaseClient.auth.signInWithPassword({
             email: email,
             password: password,
         });
 
         if (error) {
+            window.App.UI.showError(error.message);
             errorMsg.textContent = error.message;
             errorMsg.style.display = 'block';
             btn.textContent = 'Sign In';
             btn.disabled = false;
         } else {
+            window.App.UI.showSuccess("Welcome!");
             // Success! Redirect to the dashboard
             window.location.href = 'index.html';
         }

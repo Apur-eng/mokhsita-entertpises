@@ -313,7 +313,8 @@
   text-transform: uppercase;
   white-space: nowrap;
 }
-.status-pending    { background: #fef9e8; color: #a07c00; border: 1px solid #f0dc8a; }
+.status-pending,
+.status-received   { background: #fef9e8; color: #a07c00; border: 1px solid #f0dc8a; }
 .status-confirmed  { background: #e8f4f0; color: #1e6c50; border: 1px solid #a8d8c5; }
 .status-shipped    { background: #e8eef9; color: #1e3a6c; border: 1px solid #a8bce0; }
 .status-delivered  { background: var(--olive-pale); color: var(--olive-dark); border: 1px solid #c4d4b4; }
@@ -476,4 +477,171 @@
   }
   .profile-card,
   .order-card { padding: 20px; }
+}
+
+/* ─── ORDER TRACKING TIMELINE ─────────────────────────────── */
+.tracking-timeline {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--border-soft);
+}
+
+/* Horizontal stepper row */
+.tracking-steps {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+}
+
+.tracking-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+/* Connector line between steps */
+.tracking-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 13px;
+  left: calc(50% + 13px);
+  right: calc(-50% + 13px);
+  height: 2px;
+  background: var(--border-soft);
+  z-index: 0;
+}
+.tracking-step.done:not(:last-child)::after {
+  background: var(--terra);
+}
+
+/* Dot */
+.tracking-step-dot {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  border: 2px solid var(--border-soft);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  transition: border-color 0.2s, background 0.2s;
+}
+.tracking-step.done .tracking-step-dot {
+  background: var(--terra);
+  border-color: var(--terra);
+  color: #fff;
+}
+
+/* Labels */
+.tracking-step-info {
+  margin-top: 8px;
+  text-align: center;
+}
+.tracking-step-label {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+}
+.tracking-step.done .tracking-step-label {
+  color: var(--terra-dark);
+}
+.tracking-step-date {
+  font-size: 0.68rem;
+  color: var(--text-light);
+  margin-top: 3px;
+}
+
+/* Cancelled state */
+.tracking-cancelled-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fce8e8;
+  color: #ab4a3b;
+  border: 1px solid #f0b8b2;
+  border-radius: var(--r-full);
+  padding: 7px 16px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Tracking note from admin */
+.tracking-note {
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  margin-top: 14px;
+  padding: 10px 14px;
+  background: var(--off-white);
+  border-radius: var(--r-md);
+  border-left: 3px solid var(--terra);
+  font-size: 0.8rem;
+  color: var(--text-mid);
+  line-height: 1.5;
+}
+.tracking-note svg {
+  flex-shrink: 0;
+  margin-top: 1px;
+  color: var(--terra);
+}
+
+/* Mobile: stack steps vertically on very small screens */
+@media (max-width: 400px) {
+  .tracking-steps {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .tracking-step {
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    flex: none;
+    width: 100%;
+  }
+  .tracking-step::after { display: none; }
+  .tracking-step-info { text-align: left; margin-top: 0; }
+}
+
+/* ─── WHATSAPP ORDER QUERY BUTTON ─────────────────────────── */
+.order-wa-query {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border-soft);
+}
+.order-wa-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  background: #25D366;
+  color: #fff;
+  border-radius: var(--r-full);
+  font-family: var(--font-body);
+  font-size: 0.82rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+  letter-spacing: 0.01em;
+}
+.order-wa-btn:hover {
+  background: #1fb855;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37,211,102,0.3);
+}
+.order-wa-btn:active {
+  transform: translateY(0);
+}
+.order-wa-btn svg {
+  flex-shrink: 0;
 }

@@ -61,6 +61,12 @@
      ════════════════════════════════════════════════════════ -->
 <section class="hc-shop" id="products">
 
+  <!-- ── MOBILE FILTER TOGGLE ──────────────────────────────── -->
+  <button class="hc-filter-toggle-btn" id="hc-filter-toggle-btn">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+    Filters
+  </button>
+
   <!-- ── SIDEBAR ───────────────────────────────────────────── -->
   <aside class="hc-sidebar" id="hc-sidebar">
 
@@ -300,6 +306,9 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabaseClient.js"></script>
+<script src="modules/whatsapp.js"></script>
+<script src="modules/ui.js"></script>
+<script src="modules/auth.js"></script>
 <script src="main.js"></script>
 <script src="products.js"></script>
 <script src="cart.js"></script>
@@ -308,10 +317,9 @@
 <script>
   /* Auth nav state — upgrade Account button if session active */
   (async function () {
-    const client = window.supabaseClient;
-    if (!client) return;
+    if (!window.App || !window.App.Auth) return;
     try {
-      const { data: { session } } = await client.auth.getSession();
+      const { session } = await window.App.Auth.getCurrentUser();
       if (session) {
         const desktopBtn = document.getElementById('nav-account-btn');
         const mobileBtn  = document.getElementById('mobile-account-btn');
@@ -327,6 +335,47 @@
       }
     } catch (e) { /* silent */ }
   })();
+</script>
+
+<!-- ── WHATSAPP PERSONALISATION ─────────────────────────────── -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const modalBuyBtn = document.getElementById('modal-buy-btn');
+    if (!modalBuyBtn || !window.App || !window.App.WA) return;
+    // Observe href changes set by handicrafts.js openModal
+    const observer = new MutationObserver(function () {
+      const href = modalBuyBtn.getAttribute('href') || '';
+      const m = href.match(/[?&]text=([^&]*)/);
+      if (!m) return;
+      window.App.WA.personalise(modalBuyBtn, decodeURIComponent(m[1]));
+    });
+    observer.observe(modalBuyBtn, { attributes: true, attributeFilter: ['href'] });
+  });
+</script>
+<!-- ── MOBILE FILTER JS ───────────────────────────────────── -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const toggleBtn = document.getElementById('hc-filter-toggle-btn');
+    const sidebar = document.getElementById('hc-sidebar');
+    const applyBtn = document.getElementById('hc-apply-btn');
+
+    if (toggleBtn && sidebar) {
+      toggleBtn.addEventListener('click', function() {
+        sidebar.classList.toggle('hc-sidebar--open');
+        this.classList.toggle('active');
+      });
+      
+      // Auto-collapse when applying filters on mobile
+      if (applyBtn) {
+        applyBtn.addEventListener('click', function() {
+          if (window.innerWidth <= 768) {
+            sidebar.classList.remove('hc-sidebar--open');
+            toggleBtn.classList.remove('active');
+          }
+        });
+      }
+    }
+  });
 </script>
 </body>
 </html>

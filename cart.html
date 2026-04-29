@@ -303,8 +303,8 @@
             <span>Cash on Delivery (COD)</span>
           </label>
           <label class="payment-option">
-            <input type="radio" name="payment_method" value="UPI">
-            <span>UPI / Razorpay (Coming Soon)</span>
+            <input type="radio" name="payment_method" value="Razorpay">
+            <span>UPI / Razorpay</span>
           </label>
           <label class="payment-option">
             <input type="radio" name="payment_method" value="Bank Transfer">
@@ -358,8 +358,11 @@
   </div>
 </main>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabaseClient.js"></script>
+<script src="modules/ui.js"></script>
+<script src="modules/auth.js"></script>
 <script src="products.js"></script>
 <script src="supabase-products.js"></script>
 <script src="main.js"></script>
@@ -367,10 +370,9 @@
 <script>
   /* Auth nav state — upgrade Account button if session active */
   (async function () {
-    const client = window.supabaseClient;
-    if (!client) return;
+    if (!window.App || !window.App.Auth) return;
     try {
-      const { data: { session } } = await client.auth.getSession();
+      const { session } = await window.App.Auth.getCurrentUser();
       if (session) {
         const desktopBtn = document.getElementById('nav-account-btn');
         if (desktopBtn) {
@@ -408,7 +410,7 @@ async function renderCart() {
 
   if (db) {
     try {
-      const { data: { session } } = await db.auth.getSession();
+      const { session } = await window.App.Auth.getCurrentUser();
       if (session) {
         // Pre-fill email and name if logged in
         document.getElementById('ship-email').value = session.user.email || '';
@@ -601,7 +603,7 @@ async function goToStep(step) {
     if (step === 2) {
         const db = window.supabaseClient;
         if (db) {
-            const { data: { session } } = await db.auth.getSession();
+            const { session } = await window.App.Auth.getCurrentUser();
             if (!session) {
                 window.location.href = 'login.html?redirect=cart.html';
                 return;
@@ -638,27 +640,84 @@ async function placeOrderFinal() {
 
     // Collect Data
     const addressData = {
-        name: document.getElementById('ship-name').value,
-        phone: document.getElementById('ship-phone').value,
-        email: document.getElementById('ship-email').value,
-        address: document.getElementById('ship-address').value,
+        name:     document.getElementById('ship-name').value,
+        phone:    document.getElementById('ship-phone').value,
+        email:    document.getElementById('ship-email').value,
+        address:  document.getElementById('ship-address').value,
         landmark: document.getElementById('ship-landmark').value,
-        city: document.getElementById('ship-city').value,
-        state: document.getElementById('ship-state').value,
-        pincode: document.getElementById('ship-pincode').value,
-        country: document.getElementById('ship-country').value,
+        city:     document.getElementById('ship-city').value,
+        state:    document.getElementById('ship-state').value,
+        pincode:  document.getElementById('ship-pincode').value,
+        country:  document.getElementById('ship-country').value,
         honeypot: document.getElementById('ship-bot-check').value,
     };
-    
+
     const paymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
-    
-    // Send to cart.js checkout function
+
+    // ── Razorpay Flow ─────────────────────────────────────────
+    if (paymentMethod === 'Razorpay') {
+        const amountInPaise = Math.round(cartTotal * 100); // Razorpay uses paise
+
+        const rzpOptions = {
+            key:         'rzp_test_Sj4dSjgJB6rQmF',
+            amount:      amountInPaise,
+            currency:    'INR',
+            name:        'Mokshita Enterprises',
+            description: 'Handcrafted Art & Experiences',
+            image:       'images/logo.png',
+            prefill: {
+                name:    addressData.name,
+                email:   addressData.email,
+                contact: addressData.phone,
+            },
+            notes: {
+                address: addressData.address + ', ' + addressData.city
+            },
+            theme: {
+                color: '#c26a3d'
+            },
+            // Called on successful payment
+            handler: async function (response) {
+                btn.textContent = 'Saving Order...';
+                // Save order to Supabase with Razorpay payment reference
+                const paymentRef = 'Razorpay:' + response.razorpay_payment_id;
+                const result = await checkoutToOrderFull(
+                    addressData, paymentRef, cartSubtotal, cartShipping, cartTotal
+                );
+                if (result.success) {
+                    showConfirmation(result.orderNumber, addressData);
+                } else {
+                    window.App.UI.showError(result.error || 'Payment received but order save failed. Contact support.');
+                    btn.textContent = 'Place Order';
+                    btn.disabled = false;
+                }
+            },
+            modal: {
+                // User closed the popup without paying
+                ondismiss: function () {
+                    window.App.UI.showError('Payment cancelled. Your order was not placed.');
+                    btn.textContent = 'Place Order';
+                    btn.disabled = false;
+                }
+            }
+        };
+
+        const rzp = new Razorpay(rzpOptions);
+        rzp.on('payment.failed', function (response) {
+            window.App.UI.showError('Payment failed: ' + (response.error.description || 'Please try again.'));
+            btn.textContent = 'Place Order';
+            btn.disabled = false;
+        });
+        rzp.open();
+        return; // Order is saved inside handler callback above
+    }
+
+    // ── COD / Bank Transfer Flow ──────────────────────────────
     const result = await checkoutToOrderFull(addressData, paymentMethod, cartSubtotal, cartShipping, cartTotal);
-    
     if (result.success) {
         showConfirmation(result.orderNumber, addressData);
     } else {
-        alert('Checkout error: ' + result.error);
+        window.App.UI.showError(result.error || 'Checkout error occurred');
         btn.textContent = 'Place Order';
         btn.disabled = false;
     }
@@ -694,7 +753,7 @@ function showConfirmation(orderNumber, addressData) {
 }
 
 function applyPromo() {
-    alert("Promo code applied!");
+    window.App.UI.showSuccess("Promo code applied!");
 }
 
 async function changeQty(productId, change) {

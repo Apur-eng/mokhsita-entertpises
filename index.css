@@ -1407,9 +1407,7 @@
 /* ─── SCROLL WRAP & ARROWS ──────────────────────────────── */
 .artisan-scroll-wrap {
   position: relative;
-  display: flex;
-  align-items: center;
-  gap: 0;
+  /* Removed flex to allow absolute positioning of arrows over full-width track */
 }
 .artisan-scroll-track {
   display: flex;
@@ -1422,15 +1420,15 @@
   -webkit-overflow-scrolling: touch;
   padding: 6px 4px 10px; /* side padding so first/last cards don't clip shadow */
   cursor: grab;
-  flex: 1;
-  /* Partial next-card peek handled by card widths */
 }
 .artisan-scroll-track::-webkit-scrollbar { display: none; }
 .artisan-scroll-track.is-dragging { cursor: grabbing; scroll-snap-type: none; scroll-behavior: auto; }
 
-/* Arrows — white pill with shadow, accent-color hover */
+/* Arrows — absolutely positioned to edges */
 .artisan-arrow {
-  flex-shrink: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   width: 44px;
   height: 44px;
   border-radius: 50%;
@@ -1442,7 +1440,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  position: relative; /* Ensure z-index works correctly */
   z-index: 10;
   transition: background 0.2s, color 0.2s, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s;
   box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -1452,16 +1449,37 @@
 .artisan-arrow:hover {
   background: #2f5d50;
   color: #fff;
-  transform: scale(1.05);
+  transform: translateY(-50%) scale(1.05); /* maintain vertical center */
   box-shadow: 0 6px 20px rgba(47,93,80,0.2);
 }
-.artisan-arrow--prev { margin-right: 10px; }
-.artisan-arrow--next { margin-left: 10px; }
+.artisan-arrow--prev {
+  left: -10px; /* Pin to far left edge */
+}
+.artisan-arrow--next {
+  right: -10px; /* Pin to far right edge */
+}
 /* Peach row arrows hover terracotta */
 .artisan-arrow--peach:hover {
   background: #c26a3d;
   color: #fff;
+  transform: translateY(-50%) scale(1.05);
   box-shadow: 0 6px 20px rgba(194,106,61,0.2);
+}
+
+.artisan-row-footer {
+  margin-top: 24px;
+  text-align: right;
+  padding-right: 10px;
+}
+.artisan-row-footer .artisan-row-viewall {
+  display: inline-block;
+  font-family: var(--font-body, 'Inter', sans-serif);
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  text-decoration: none;
+  transition: opacity 0.2s ease;
 }
 
 /* ─── PRODUCT CARD ──────────────────────────────────────── */
@@ -1486,6 +1504,93 @@
 .artisan-card--sm {
   flex: 0 0 260px;
   width: 260px;
+}
+
+/* CTA Card styling */
+.artisan-card--cta {
+  background: #c97a4a;
+  color: #fff;
+  border: none;
+  display: flex;
+  min-height: 380px;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: background 0.3s ease, transform 0.3s ease;
+  cursor: pointer;
+}
+.artisan-card--cta:hover {
+  background: #a86030;
+  transform: translateY(-4px);
+}
+.artisan-card-cta-content h3 {
+  font-family: var(--font-display, 'Playfair Display', serif);
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin: 0;
+  color: #fff;
+}
+
+@media (max-width: 768px) {
+  /* Fix sticky issue by overriding parent overflow */
+  .artisan-shop-section {
+    overflow: visible;
+  }
+  
+  /* Mobile Stacked Sticky Layout for Homepage Sliders */
+  .artisan-scroll-wrap {
+    display: block;
+  }
+  
+  .artisan-scroll-track {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 10px 40px;
+    gap: 8vh;
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+  
+  /* Hide arrows */
+  .artisan-arrow { display: none !important; }
+  
+  .artisan-scroll-track .artisan-card {
+    position: sticky;
+    width: 100%;
+    max-width: 100%;
+    flex: none;
+    scroll-snap-align: none;
+    box-shadow: 0 -12px 40px rgba(0,0,0,0.06), 0 8px 24px rgba(47, 93, 80, 0.05);
+    height: auto;
+    margin: 0;
+  }
+  
+  /* Max 5 cards per section on mobile (4 products + 1 CTA) */
+  .artisan-scroll-track .artisan-card:nth-child(n+5):not(.artisan-card--cta) {
+    display: none !important;
+  }
+  
+  /* Prevent sticky jumping on touch/hover */
+  .artisan-scroll-track .artisan-card:hover {
+    transform: none;
+  }
+  
+  /* Cascading sticky tops */
+  .artisan-scroll-track .artisan-card:nth-child(1) { top: 60px; z-index: 10; }
+  .artisan-scroll-track .artisan-card:nth-child(2) { top: 80px; z-index: 11; }
+  .artisan-scroll-track .artisan-card:nth-child(3) { top: 100px; z-index: 12; }
+  .artisan-scroll-track .artisan-card:nth-child(4) { top: 120px; z-index: 13; }
+  
+  .artisan-scroll-track .artisan-card .artisan-card-img-wrap {
+    height: 360px;
+  }
+  
+  .artisan-scroll-track .artisan-card.artisan-card--cta {
+    height: 200px;
+    top: 140px; 
+    z-index: 14;
+  }
 }
 
 /* Card image */

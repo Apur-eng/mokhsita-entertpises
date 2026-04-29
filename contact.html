@@ -30,7 +30,7 @@
     <li><a href="contact.html"     class="nav-link active">Contact Us</a></li>
   </ul>
   <div style="display:flex; align-items:center; gap: 15px;">
-    <a href="login.html" class="nav-account" aria-label="Account" style="color: var(--text-dark); display: flex; align-items: center;">
+    <a href="login.html" class="nav-account" id="nav-account-btn" aria-label="Account" style="color: var(--text-dark); display: flex; align-items: center;">
       <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
     </a>
     <a href="cart.html" class="nav-cart">
@@ -48,7 +48,7 @@
   <a href="travel.html"      class="nav-link">Travel</a>
   <a href="handicrafts.html" class="nav-link">Art &amp; Collection</a>
   <a href="cart.html"        class="nav-link">Cart</a>
-  <a href="login.html"       class="nav-link">Account</a>
+  <a href="login.html"       class="nav-link" id="mobile-account-btn">Account</a>
   <a href="contact.html"     class="nav-link active">Contact Us</a>
   <a href="contact.html" class="btn btn-primary" style="width:100%;justify-content:center;margin-top:8px;">Plan Your Journey</a>
 </div>
@@ -326,9 +326,33 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabaseClient.js"></script>
+<script src="modules/whatsapp.js"></script>
+<script src="modules/ui.js"></script>
+<script src="modules/auth.js"></script>
 <script src="main.js"></script>
 <script src="cart.js"></script>
 <script>
+  /* Auth nav state — upgrade Account button if session active */
+  (async function () {
+    if (!window.App || !window.App.Auth) return;
+    try {
+      const { session } = await window.App.Auth.getCurrentUser();
+      if (session) {
+        const desktopBtn = document.getElementById('nav-account-btn');
+        const mobileBtn  = document.getElementById('mobile-account-btn');
+        if (desktopBtn) {
+          desktopBtn.href = 'account.html';
+          desktopBtn.querySelector('svg').style.color = 'var(--terra, #c26a3d)';
+          desktopBtn.setAttribute('aria-label', 'My Account');
+        }
+        if (mobileBtn) {
+          mobileBtn.href        = 'account.html';
+          mobileBtn.textContent = 'My Account';
+        }
+      }
+    } catch (e) { /* silent */ }
+  })();
+
   /* ── Pre-fill item field from URL param ────────────────── */
   const params = new URLSearchParams(window.location.search);
   const item = params.get('item');
@@ -371,7 +395,7 @@
     const lastLeadTime = localStorage.getItem('mokshita_last_lead');
     const now = Date.now();
     if (lastLeadTime && now - parseInt(lastLeadTime) < 60000) { // 1 min limit
-      alert("Please wait a minute before sending another message.");
+      window.App.UI.showError("Please wait a minute before sending another message.");
       btn.textContent = 'Send Message';
       btn.disabled = false;
       return;
@@ -379,7 +403,7 @@
 
     // Basic regex validation
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      alert("Please enter a valid email address.");
+      window.App.UI.showError("Please enter a valid email address.");
       btn.textContent = 'Send Message';
       btn.disabled = false;
       return;
@@ -403,7 +427,7 @@
       
     } catch (err) {
       console.error("Supabase Insert Error:", err);
-      alert("There was an error sending your message: " + err.message);
+      window.App.UI.showError("There was an error sending your message: " + err.message);
       btn.textContent = 'Send Message';
       btn.disabled = false;
     }
@@ -431,6 +455,33 @@
         if (answer) answer.hidden = false;
       }
     });
+  });
+</script>
+
+<!-- ── WHATSAPP & FORM PERSONALISATION ─────────────────────── -->
+<script>
+  document.addEventListener('DOMContentLoaded', async function () {
+    // 1. Personalise the sidebar WhatsApp CTA button
+    const waBtn = document.getElementById('contact-whatsapp');
+    if (waBtn && window.App && window.App.WA) {
+      window.App.WA.personalise(
+        waBtn,
+        'Hello, I am interested in learning more about Artisans of India.'
+      );
+    }
+
+    // 2. Pre-fill contact form name & email if logged in
+    if (window.App && window.App.Auth) {
+      try {
+        const { session } = await window.App.Auth.getCurrentUser();
+        if (session) {
+          const nameEl  = document.getElementById('contact-name');
+          const emailEl = document.getElementById('contact-email');
+          if (nameEl  && !nameEl.value)  nameEl.value  = session.user.user_metadata?.full_name || '';
+          if (emailEl && !emailEl.value) emailEl.value = session.user.email || '';
+        }
+      } catch (e) { /* silent */ }
+    }
   });
 </script>
 </body>

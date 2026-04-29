@@ -9,27 +9,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const newPwdInput = document.getElementById('new-password');
   const confirmPwdInput = document.getElementById('confirm-password');
 
-  const showMsg = (msg, isError = false) => {
-    msgEl.innerText = msg;
-    msgEl.className = 'auth-message ' + (isError ? 'error' : 'success');
-  };
-
-  const showToast = (msg) => {
-    const toast = document.createElement('div');
-    toast.className = 'cart-toast success';
-    toast.innerText = msg;
-    document.body.appendChild(toast);
-    requestAnimationFrame(() => {
-      setTimeout(() => toast.classList.add('show'), 10);
-      setTimeout(() => {
-        toast.classList.remove('show');
-        setTimeout(() => toast.remove(), 350);
-      }, 2200);
-    });
-  };
-
   if (!window.supabaseClient) {
-    showMsg('Supabase client not loaded.', true);
+    window.App.UI.showError('Supabase client not loaded.');
     btnUpdate.disabled = true;
     return;
   }
@@ -39,7 +20,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const { data: { session }, error: sessionErr } = await window.supabaseClient.auth.getSession();
   
   if (sessionErr || !session) {
-    showMsg('Invalid or expired password reset link. Please request a new one.', true);
+    window.App.UI.showError('Invalid or expired password reset link. Please request a new one.');
     btnUpdate.disabled = true;
     return;
   }
@@ -51,19 +32,18 @@ document.addEventListener('DOMContentLoaded', async () => {
     const confirmPassword = confirmPwdInput.value;
 
     if (newPassword.length < 6) {
-      showMsg('Password must be at least 6 characters long.', true);
+      window.App.UI.showError('Password must be at least 6 characters long.');
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      showMsg('Passwords do not match.', true);
+      window.App.UI.showError('Passwords do not match.');
       return;
     }
 
     const originalText = btnUpdate.innerText;
     btnUpdate.innerText = 'Updating...';
     btnUpdate.disabled = true;
-    showMsg('');
 
     try {
       const { error } = await window.supabaseClient.auth.updateUser({
@@ -71,11 +51,11 @@ document.addEventListener('DOMContentLoaded', async () => {
       });
 
       if (error) {
-        showMsg(error.message, true);
+        window.App.UI.showError(error.message);
         btnUpdate.innerText = originalText;
         btnUpdate.disabled = false;
       } else {
-        showToast('Password updated successfully!');
+        window.App.UI.showSuccess('Password updated successfully!');
         // Sign out to force re-login with new password, or redirect directly
         await window.supabaseClient.auth.signOut();
         setTimeout(() => {
@@ -84,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     } catch (err) {
       console.error(err);
-      showMsg('An unexpected error occurred.', true);
+      window.App.UI.showError('An unexpected error occurred.');
       btnUpdate.innerText = originalText;
       btnUpdate.disabled = false;
     }

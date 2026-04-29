@@ -4,20 +4,8 @@
 
 'use strict';
 
-// ── Toast Helper ────────────────────────────────────────────
-function showCartToast(msg, isError = false) {
-  const toast = document.createElement('div');
-  toast.className = 'cart-toast' + (isError ? ' error' : '');
-  toast.innerText = msg;
-  document.body.appendChild(toast);
-  requestAnimationFrame(() => {
-    setTimeout(() => toast.classList.add('show'), 10);
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 350);
-    }, 2200);
-  });
-}
+// ── Toast Helper (Removed) ──
+// Handled by App.UI
 
 // ── Cart Badge Update ────────────────────────────────────────
 async function updateCartUI() {
@@ -26,7 +14,7 @@ async function updateCartUI() {
 
   if (db) {
     try {
-      const { data: { session } } = await db.auth.getSession();
+      const { session } = await window.App.Auth.getCurrentUser();
       if (session) {
         // Authenticated: read count from Supabase cart_items
         const { data: cartRow } = await db
@@ -105,7 +93,7 @@ async function syncGuestCart() {
   const db = window.supabaseClient;
   if (!db) return;
 
-  const { data: { session } } = await db.auth.getSession();
+  const { session } = await window.App.Auth.getCurrentUser();
   if (!session) return;
 
   try {
@@ -174,7 +162,7 @@ async function addToCart(productId, quantity = 1) {
 
   if (db) {
     try {
-      const { data: { session } } = await db.auth.getSession();
+      const { session } = await window.App.Auth.getCurrentUser();
 
       if (session) {
         // ── Authenticated flow: write to Supabase ──
@@ -190,7 +178,7 @@ async function addToCart(productId, quantity = 1) {
         const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
         if (!uuidRegex.test(actualProductId)) {
             console.error('[Cart] Cannot add to cart, actualProductId is not a UUID:', actualProductId);
-            showCartToast('Error adding to cart. Product data invalid.', true);
+            window.App.UI.showError('Error adding to cart. Product data invalid.');
             return;
         }
 
@@ -242,14 +230,14 @@ async function addToCart(productId, quantity = 1) {
         }
 
         console.log(`[Cart] Added product ${actualProductId} (qty: ${quantity}) to Supabase cart`);
-        showCartToast('Added to Cart!');
+        window.App.UI.showSuccess('Added to Cart!');
         await updateCartUI();
         if (typeof renderCart === 'function') await renderCart();
         return;
       }
     } catch (err) {
       console.error('[Cart] Authenticated cart error:', err);
-      showCartToast('Error adding to cart. Please try again.', true);
+      window.App.UI.showError('Error adding to cart. Please try again.');
       return; // Do not fall back to local storage if authenticated request fails
     }
   }
@@ -263,7 +251,7 @@ async function addToCart(productId, quantity = 1) {
     local.push({ id: productId, quantity });
   }
   localStorage.setItem('mokshita_cart', JSON.stringify(local));
-  showCartToast('Added to Cart!');
+  window.App.UI.showSuccess('Added to Cart!');
   await updateCartUI();
 }
 
@@ -273,7 +261,7 @@ async function removeFromCart(productId) {
 
   if (db) {
     try {
-      const { data: { session } } = await db.auth.getSession();
+      const { session } = await window.App.Auth.getCurrentUser();
       if (session) {
         let actualProductId = productId;
         if (typeof actualProductId === 'string' && actualProductId.includes(':')) {
@@ -322,7 +310,7 @@ async function updateQuantity(productId, quantity) {
 
   if (db) {
     try {
-      const { data: { session } } = await db.auth.getSession();
+      const { session } = await window.App.Auth.getCurrentUser();
       if (session) {
         let actualProductId = productId;
         if (typeof actualProductId === 'string' && actualProductId.includes(':')) {
@@ -366,7 +354,7 @@ window.updateQuantityFallback = async function(productId, change) {
     const db = window.supabaseClient;
     if (db) {
         try {
-            const { data: { session } } = await db.auth.getSession();
+            const { session } = await window.App.Auth.getCurrentUser();
             if (session) {
                 let actualProductId = productId;
                 if (typeof actualProductId === 'string' && actualProductId.includes(':')) {
@@ -424,7 +412,7 @@ window.checkoutToOrderFull = async function(addressData, paymentMethod, subtotal
   const db = window.supabaseClient;
   if (!db) return { error: 'No database connection' };
 
-  const { data: { session } } = await db.auth.getSession();
+  const { session } = await window.App.Auth.getCurrentUser();
   let userId = session ? session.user.id : null;
   let cartItems = [];
   let cartId = null;
@@ -461,46 +449,125 @@ window.checkoutToOrderFull = async function(addressData, paymentMethod, subtotal
       if(!priceMap[p.dbId]) priceMap[p.dbId] = p;
   });
 
+  // Recalculate true prices from DB and detect genuine per-item price changes
+  let dbSubtotal = 0;
+  let priceMismatch = false;
+  let missingProducts = false;
+
+  const orderItemsData = cartItems.map(item => {
+    const p = priceMap[item.product_id];
+    if (!p) {
+      missingProducts = true;
+      return null;
+    }
+    const dbPrice = p.price || 0;
+    dbSubtotal += dbPrice * item.quantity;
+    return {
+      product_id:    item.product_id,
+      product_name:  p.name || p.title || 'Unknown', // stored for notes; not a DB column
+      quantity:      item.quantity,
+      price_at_time: dbPrice                          // correct schema column
+    };
+  }).filter(Boolean);
+
+  if (missingProducts) {
+    return { error: 'One or more products in your cart could not be found. Please refresh and try again.' };
+  }
+
+  // The UI passed shippingCost, we accept it as calculated by the UI rules
+  const dbTotalAmount = dbSubtotal + shippingCost;
+
+  // clientTotal = what the UI displayed as grand total (subtotal + shipping)
+  console.log({
+    clientSubtotal: subtotal,
+    clientTotal: subtotal + shippingCost,   // grand total as shown to user
+    serverSubtotal: dbSubtotal,
+    serverTotal: dbTotalAmount,
+    shipping: shippingCost
+  });
+
+  // Only flag a price mismatch if the difference in SUBTOTAL exceeds ₹1.
+  // This excludes shipping logic from the product price validation.
+  if (Math.abs(dbSubtotal - subtotal) > 1) {
+      // Update local storage to fix UI prices for guest
+      if (!userId) {
+          const local = JSON.parse(localStorage.getItem('mokshita_cart') || '[]');
+          const updatedLocal = local.map(i => {
+              const p = priceMap[i.id];
+              if (p) i.price = p.price;
+              return i;
+          });
+          localStorage.setItem('mokshita_cart', JSON.stringify(updatedLocal));
+          if (typeof renderCart === 'function') renderCart();
+      }
+      return { error: 'Prices have been updated in the database. Your cart totals have been refreshed. Please review and try checkout again.' };
+  }
+
   const orderNumber = 'ORD-' + Math.random().toString(36).substr(2, 8).toUpperCase();
   const addressLine = addressData.address + (addressData.landmark ? ', ' + addressData.landmark : '');
 
-  // Prepare JSON array for order items
-  const orderItemsData = cartItems.map(item => ({
-    product_id: item.product_id,
-    product_name: priceMap[item.product_id]?.name || priceMap[item.product_id]?.title || 'Unknown',
-    quantity: item.quantity,
-    price: priceMap[item.product_id]?.price || 0
+  // Build the items snapshot — stored as JSONB in the orders row.
+  // This is how account.js and admin_orders.js read order items (via select('*') on orders).
+  const orderItemsSnapshot = orderItemsData.map(item => ({
+      product_id:   item.product_id,
+      product_name: item.product_name,
+      quantity:     item.quantity,
+      price:        item.price_at_time   // column name in orders.order_items JSONB
   }));
 
-  // Insert Order
   const orderPayload = {
-      user_id: userId,
-      order_number: orderNumber,
+      user_id:       userId,
+      order_number:  orderNumber,
       customer_name: addressData.name,
-      phone: addressData.phone,
-      email: addressData.email,
-      address_line: addressLine,
-      city: addressData.city,
-      state: addressData.state,
-      pincode: addressData.pincode,
-      country: addressData.country,
+      phone:         addressData.phone,
+      email:         addressData.email,
+      address_line:  addressLine,
+      city:          addressData.city,
+      state:         addressData.state,
+      pincode:       addressData.pincode,
+      country:       addressData.country,
       payment_method: paymentMethod,
-      subtotal: subtotal,
-      shipping_cost: shippingCost,
-      total: totalAmount,
-      status: 'pending',
-      order_items: orderItemsData
+      subtotal:      dbSubtotal,
+      shipping_cost: shippingCost, // Fix: use the accepted shipping cost
+      total:         dbTotalAmount,
+      status:        'received',        // 'pending' not in orders_status_check constraint
+      order_items:   orderItemsSnapshot   // JSONB — read by account.js & admin_orders.js
   };
 
-  const { data: newOrder, error: orderErr } = await db
+  console.log('[Checkout] Insert Payload:', orderPayload);
+
+  // Issue 2 Fix: Use .select() instead of .single() so RLS doesn't crash guest checkouts (PGRST116)
+  const { data: newOrderData, error: orderErr } = await db
     .from('orders')
     .insert([orderPayload])
-    .select('id')
-    .single();
+    .select();
+
+  console.log('[Checkout] Insert Response:', { data: newOrderData, error: orderErr });
 
   if (orderErr) {
     console.error('[Checkout] Error creating order:', orderErr);
     return { error: orderErr.message };
+  }
+
+  // Handle RLS hiding the returned row for guest users
+  const newOrderId = newOrderData && newOrderData.length > 0 ? newOrderData[0].id : orderNumber;
+
+  // Best-effort: also write to relational order_items table if it exists.
+  // This does NOT block order completion — failure here is non-fatal.
+  try {
+    const relationalItems = orderItemsData.map(item => ({
+        order_id:      newOrderId,
+        product_id:    item.product_id,
+        quantity:      item.quantity,
+        price_at_time: item.price_at_time
+    }));
+    const { error: itemsErr } = await db.from('order_items').insert(relationalItems);
+    if (itemsErr) {
+      // Log but do not block — order is already saved with JSONB items
+      console.warn('[Checkout] Relational order_items insert skipped:', itemsErr.message);
+    }
+  } catch (e) {
+    console.warn('[Checkout] Relational order_items insert error (non-fatal):', e);
   }
 
   // Update user profile metadata
@@ -529,26 +596,15 @@ window.checkoutToOrderFull = async function(addressData, paymentMethod, subtotal
     localStorage.removeItem('mokshita_cart');
   }
 
-  console.log('[Checkout] Order created:', newOrder.id, '| Total:', totalAmount);
+  console.log('[Checkout] Order created:', newOrderId, '| Total:', totalAmount);
   localStorage.setItem('mokshita_last_order', Date.now().toString());
   await updateCartUI();
-  return { success: true, orderId: newOrder.id, orderNumber: orderNumber, total: totalAmount };
+  return { success: true, orderId: newOrderId, orderNumber: orderNumber, total: totalAmount };
 }
 
 // ── Inject CSS ───────────────────────────────────────────────
 const cartStyle = document.createElement('style');
 cartStyle.innerHTML = `
-.cart-toast {
-  position: fixed; bottom: 24px; right: 24px;
-  background: #3a4a42; color: #fff;
-  padding: 12px 24px; border-radius: 8px;
-  font-family: 'Inter', sans-serif; font-size: 0.9rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.18);
-  transform: translateY(20px); opacity: 0;
-  transition: all 0.3s ease; z-index: 10000;
-}
-.cart-toast.show { transform: translateY(0); opacity: 1; }
-.cart-toast.error { background: #b91c1c; }
 .nav-cart { position: relative; display: flex; align-items: center; color: var(--text-color, #1a231e); margin-left: 20px; text-decoration: none; }
 .cart-badge {
   position: absolute; top: -8px; right: -8px;

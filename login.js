@@ -65,13 +65,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const urlParams = new URLSearchParams(window.location.search);
         const redirectUrl = urlParams.get('redirect') || 'account.html';
-        
-        // Redirect to account page
+        window.App.UI.showSuccess("Welcome back!");
         setTimeout(() => { window.location.replace(redirectUrl); }, 800);
         
       } catch (err) {
-        loginMsg.textContent = err.message;
-        loginMsg.classList.add('error');
+        window.App.UI.showError(err.message);
       } finally {
         btn.disabled = false;
         btn.textContent = 'Sign In';
@@ -105,13 +103,11 @@ document.addEventListener('DOMContentLoaded', () => {
         
         if (error) throw error;
         
-        signupMsg.innerHTML = "Account created! <b>Please check your email to confirm your account.</b>";
-        signupMsg.classList.add('success');
+        window.App.UI.showSuccess("Account created! Please check your email to confirm your account.");
         formSignup.reset();
         
       } catch (err) {
-        signupMsg.textContent = err.message;
-        signupMsg.classList.add('error');
+        window.App.UI.showError(err.message);
       } finally {
         btn.disabled = false;
         btn.textContent = 'Create Account';
@@ -123,7 +119,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnLogout = document.getElementById('btn-logout');
   if (btnLogout) {
     btnLogout.addEventListener('click', async () => {
-      await supabase.auth.signOut();
+      await window.App.Auth.logout(null);
       window.location.reload();
     });
   }
@@ -134,14 +130,10 @@ document.addEventListener('DOMContentLoaded', () => {
   });
   
   // Check initial session — redirect to account if already logged in
-  supabase.auth.getSession().then(({ data: { session } }) => {
-    if (session) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const redirectUrl = urlParams.get('redirect') || 'account.html';
-      window.location.replace(redirectUrl);
-    } else {
-      updateAuthUI(session);
-    }
+  const urlParams = new URLSearchParams(window.location.search);
+  const redirectUrl = urlParams.get('redirect') || 'account.html';
+  window.App.Auth.requireGuest(redirectUrl).then(isGuest => {
+      if (isGuest) updateAuthUI(null);
   });
 
   function updateAuthUI(session) {

@@ -3,187 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin - Order Management</title>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        /* Base resets for standalone dashboard */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: #f7f4ef; }
-        .nav {
-            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-            display: flex; align-items: center; justify-content: space-between;
-            padding: 0 40px; height: 72px;
-            background: rgba(247,244,239,0.95); backdrop-filter: blur(12px);
-            border-bottom: 1px solid rgba(194,106,61,0.15);
-        }
-        .nav-logo { text-decoration: none; }
-        .nav-logo-title { display: block; font-family: 'Lora', serif; font-size: 1.1rem; color: #2b332f; font-weight: 600; }
-        .nav-logo-sub { display: block; font-size: 0.75rem; color: #6a7d75; letter-spacing: 0.5px; }
-        .nav-cta {
-            display: inline-flex; align-items: center; gap: 6px;
-            padding: 10px 22px; border-radius: 50px;
-            background: #c26a3d; color: #fff;
-            font-family: 'Inter', sans-serif; font-size: 0.875rem; font-weight: 500;
-            text-decoration: none; transition: background 0.2s;
-        }
-        .nav-cta:hover { background: #a85530; }
-        .checkout-btn {
-            display: inline-flex; align-items: center; gap: 8px;
-            padding: 12px 28px; border-radius: 50px; border: none; cursor: pointer;
-            background: #c26a3d; color: #fff;
-            font-family: 'Inter', sans-serif; font-size: 0.9rem; font-weight: 500;
-            transition: background 0.2s;
-        }
-        .checkout-btn:hover { background: #a85530; }
-    </style>
-    <style>
-        .admin-container {
-            max-width: 1200px;
-            margin: 120px auto 80px;
-            padding: 0 40px;
-            font-family: 'Inter', sans-serif;
-        }
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 30px;
-        }
-        .admin-title {
-            font-family: 'Lora', serif;
-            font-size: 2.5rem;
-            color: #2b332f;
-        }
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-bottom: 40px;
-        }
-        .stat-card {
-            background: #fff;
-            padding: 24px;
-            border-radius: 12px;
-            border: 1px solid rgba(194, 106, 61, 0.2);
-            box-shadow: 0 4px 12px rgba(43, 51, 47, 0.05);
-        }
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 600;
-            color: #c26a3d;
-            margin-bottom: 8px;
-        }
-        .stat-label {
-            color: #6a7d75;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        .orders-table-wrapper {
-            background: #fff;
-            border-radius: 12px;
-            border: 1px solid rgba(194, 106, 61, 0.2);
-            overflow: hidden;
-            box-shadow: 0 4px 12px rgba(43, 51, 47, 0.05);
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            text-align: left;
-        }
-        th, td {
-            padding: 16px 20px;
-            border-bottom: 1px solid rgba(194, 106, 61, 0.1);
-        }
-        th {
-            background: #faf9f6;
-            color: #2b332f;
-            font-weight: 500;
-            font-size: 0.95rem;
-        }
-        td {
-            color: #3a4a42;
-            font-size: 0.95rem;
-        }
-        .status-badge {
-            display: inline-block;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 500;
-            text-transform: capitalize;
-        }
-        .status-pending { background: #fff3cd; color: #856404; }
-        .status-confirmed { background: #d1ecf1; color: #0c5460; }
-        .status-shipped { background: #cce5ff; color: #004085; }
-        .status-delivered { background: #d4edda; color: #155724; }
-        .status-cancelled { background: #f8d7da; color: #721c24; }
-        
-        select.status-dropdown {
-            padding: 6px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            font-family: 'Inter', sans-serif;
-            font-size: 0.85rem;
-        }
-        .action-btn {
-            background: none;
-            border: none;
-            color: #c26a3d;
-            cursor: pointer;
-            text-decoration: underline;
-            font-family: 'Inter', sans-serif;
-        }
-        
-        /* Modal */
-        .modal-overlay {
-            position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.5); backdrop-filter: blur(4px);
-            display: none; align-items: center; justify-content: center; z-index: 1000;
-        }
-        .modal {
-            background: #fff; width: 90%; max-width: 600px;
-            border-radius: 12px; padding: 30px; max-height: 90vh; overflow-y: auto;
-        }
-        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
-        .modal-title { font-family: 'Lora', serif; font-size: 1.5rem; color: #2b332f; }
-        .close-btn { background: none; border: none; font-size: 1.5rem; cursor: pointer; color: #666; }
-    </style>
+    <title>Admin — Mokshita Enterprises</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="dashboard.css">
 </head>
-<body class="page-bg-wrapper">
+<body>
 
-<nav class="nav" id="main-nav" aria-label="Main navigation">
-  <a href="../index.html" class="nav-logo">
-    <span class="nav-logo-title">Mokshita Enterprises</span>
-    <span class="nav-logo-sub">Admin Panel</span>
-  </a>
-  <a href="../index.html" class="nav-cta" style="margin-left:auto;">← Back to Site</a>
-  <button id="admin-logout-btn" class="nav-cta" style="margin-left:15px; background: #ab4a3b; border: none; cursor: pointer;">Log Out</button>
-</nav>
+<!-- ══ SIDEBAR ════════════════════════════════════════════════ -->
+<aside class="sidebar">
+    <a href="../index.html" class="sidebar-logo">
+        <div class="sidebar-logo-icon">M</div>
+        <div class="sidebar-logo-text">
+            <span class="sidebar-logo-title">Mokshita</span>
+            <span class="sidebar-logo-sub">Admin</span>
+        </div>
+    </a>
 
-<main class="admin-container">
-    <div class="admin-header">
-        <h1 class="admin-title">Order Management</h1>
-        <button class="checkout-btn" style="width:auto; padding: 10px 24px; margin:0;" onclick="loadOrders()">Refresh Orders</button>
+    <nav class="sidebar-nav">
+        <div class="sidebar-section-label">Manage</div>
+        <a href="#" class="sidebar-link active">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            Orders
+        </a>
+        <a href="../index.html" class="sidebar-link">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            View Site
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <!-- Logout button — ID preserved for JS binding -->
+        <button id="admin-logout-btn" class="btn btn-danger" style="width:100%;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Log Out
+        </button>
     </div>
+</aside>
 
+<!-- ══ TOP BAR ════════════════════════════════════════════════ -->
+<header class="topbar">
+    <div class="topbar-left">
+        <div>
+            <div class="topbar-title">Order Management</div>
+            <div class="topbar-subtitle">Mokshita Enterprises · Admin Panel</div>
+        </div>
+    </div>
+    <div class="topbar-right">
+        <!-- loadOrders() call preserved -->
+        <button class="btn btn-ghost" onclick="loadOrders()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Refresh
+        </button>
+    </div>
+</header>
+
+<!-- ══ MAIN CONTENT ════════════════════════════════════════════ -->
+<main class="admin-main">
+
+    <!-- ── Stats ─────────────────────────────────────────────── -->
     <div class="stats-grid">
         <div class="stat-card">
-            <div class="stat-value" id="stat-new">0</div>
-            <div class="stat-label">New / Pending</div>
+            <div class="stat-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            </div>
+            <!-- ID preserved: stat-new -->
+            <div class="stat-value" id="stat-new">—</div>
+            <div class="stat-label">Pending Orders</div>
         </div>
         <div class="stat-card">
-            <div class="stat-value" id="stat-shipped">0</div>
-            <div class="stat-label">Shipped</div>
+            <div class="stat-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+            </div>
+            <!-- ID preserved: stat-shipped -->
+            <div class="stat-value" id="stat-shipped">—</div>
+            <div class="stat-label">In Progress Orders</div>
         </div>
         <div class="stat-card">
-            <div class="stat-value" id="stat-revenue">₹0</div>
-            <div class="stat-label">Total Revenue</div>
+            <div class="stat-icon">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+            </div>
+            <!-- Changed to stat-completed -->
+            <div class="stat-value" id="stat-completed">—</div>
+            <div class="stat-label">Completed Orders</div>
         </div>
     </div>
 
-    <h2 style="margin-bottom:15px; font-family:'Lora', serif; color:#2b332f;">Pending Orders</h2>
-    <div class="orders-table-wrapper" style="margin-bottom: 40px;">
+    <!-- ── Pending Orders Table ───────────────────────────────── -->
+    <div class="section-header">
+        <h2 class="section-title">Pending Orders</h2>
+    </div>
+    <div class="orders-table-wrapper" style="margin-bottom: 36px;">
         <table>
             <thead>
                 <tr>
@@ -196,12 +106,37 @@
                 </tr>
             </thead>
             <tbody id="pending-orders-tbody">
-                <tr><td colspan="6" style="text-align:center;">Loading orders...</td></tr>
+                <tr class="empty-state-row"><td colspan="6">Loading orders…</td></tr>
             </tbody>
         </table>
     </div>
 
-    <h2 style="margin-bottom:15px; font-family:'Lora', serif; color:#2b332f;">Order History</h2>
+    <!-- ── Shipped Orders Table ───────────────────────────────── -->
+    <div class="section-header">
+        <h2 class="section-title">Shipped Orders</h2>
+    </div>
+    <div class="orders-table-wrapper" style="margin-bottom: 36px;">
+        <table>
+            <thead>
+                <tr>
+                    <th>Order #</th>
+                    <th>Date</th>
+                    <th>Customer</th>
+                    <th>Total</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="shipped-orders-tbody">
+                <tr class="empty-state-row"><td colspan="6">Loading orders…</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ── Delivered Orders Table ─────────────────────────────── -->
+    <div class="section-header">
+        <h2 class="section-title">Delivered Orders</h2>
+    </div>
     <div class="orders-table-wrapper">
         <table>
             <thead>
@@ -214,53 +149,48 @@
                     <th>Actions</th>
                 </tr>
             </thead>
-            <tbody id="history-orders-tbody">
-                <tr><td colspan="6" style="text-align:center;">Loading orders...</td></tr>
+            <tbody id="delivered-orders-tbody">
+                <tr class="empty-state-row"><td colspan="6">Loading orders…</td></tr>
             </tbody>
         </table>
     </div>
+
 </main>
 
+<!-- ══ MODAL ══════════════════════════════════════════════════ -->
+<!-- ID preserved: order-modal, modal-order-id, modal-content -->
+<!-- closeModal() call preserved -->
 <div class="modal-overlay" id="order-modal">
     <div class="modal">
         <div class="modal-header">
             <h2 class="modal-title" id="modal-order-id">Order Details</h2>
-            <button class="close-btn" onclick="closeModal()">&times;</button>
+            <button class="close-btn" onclick="closeModal()">&#x2715;</button>
         </div>
         <div id="modal-content"></div>
     </div>
 </div>
 
+<!-- ══ SCRIPTS ════════════════════════════════════════════════ -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../supabaseClient.js"></script>
+<script src="../modules/ui.js"></script>
+<script src="../modules/auth.js"></script>
 <script>
-  // Supabase client — inlined so dashboard works as a standalone deployment
   (function() {
-    const SUPABASE_URL = 'https://txnckfkaecrqwooiobhs.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InR4bmNrZmthZWNycXdvb2lvYmhzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcxMjAyOTQsImV4cCI6MjA5MjY5NjI5NH0.CcD0x_MXDhsW3kFahF7l3C10MejS8YAffaPgBFtLXZ4';
-    if (!window.supabaseClient && window.supabase && window.supabase.createClient) {
-      window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-      console.log('[Supabase] Dashboard client initialized.');
-    }
-
-    // --- Route Protection ---
+    // --- Route Protection (unchanged) ---
     window.addEventListener('DOMContentLoaded', async () => {
-      const { data: { session }, error } = await window.supabaseClient.auth.getSession();
-      if (error || !session) {
-        // No valid session, redirect to login page
-        window.location.replace('login.html');
-      } else {
-        // We have a session, allow access
-        console.log('[Supabase] Admin authenticated as:', session.user.email);
+      const user = await window.App.Auth.requireAuth('login.html');
+      if (user) {
+        console.log('[Supabase] Admin authenticated as:', user.email);
       }
     });
 
-    // --- Logout Logic ---
+    // --- Logout Logic (unchanged, ID preserved) ---
     document.getElementById('admin-logout-btn').addEventListener('click', async () => {
       const btn = document.getElementById('admin-logout-btn');
-      btn.textContent = 'Logging out...';
+      btn.textContent = 'Logging out…';
       btn.disabled = true;
-      await window.supabaseClient.auth.signOut();
-      window.location.replace('login.html');
+      await window.App.Auth.logout('login.html');
     });
   })();
 </script>

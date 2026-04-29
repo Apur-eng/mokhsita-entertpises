@@ -408,15 +408,17 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabaseClient.js"></script>
+<script src="modules/whatsapp.js"></script>
+<script src="modules/ui.js"></script>
+<script src="modules/auth.js"></script>
 <script src="main.js"></script>
 <script src="cart.js"></script>
 <script>
   /* Auth nav state — upgrade Account button if session active */
   (async function () {
-    const client = window.supabaseClient;
-    if (!client) return;
+    if (!window.App || !window.App.Auth) return;
     try {
-      const { data: { session } } = await client.auth.getSession();
+      const { session } = await window.App.Auth.getCurrentUser();
       if (session) {
         const desktopBtn = document.getElementById('nav-account-btn');
         const mobileBtn  = document.getElementById('mobile-account-btn');
@@ -432,6 +434,22 @@
       }
     } catch (e) { /* silent */ }
   })();
+</script>
+
+<!-- ── WHATSAPP PERSONALISATION ─────────────────────────────── -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    if (!window.App || !window.App.WA) return;
+    const packages = [
+      { id: 'book-agra',   msg: "I'm interested in the Agra Taj Mahal & Beyond package" },
+      { id: 'book-delhi',  msg: "I'm interested in The Delhi package" },
+      { id: 'book-jaipur', msg: "I'm interested in the Jaipur package" },
+    ];
+    packages.forEach(function (pkg) {
+      const el = document.getElementById(pkg.id);
+      if (el) window.App.WA.personalise(el, pkg.msg);
+    });
+  });
 </script>
 </body>
 </html>

@@ -965,11 +965,311 @@ body {
 /* ── Responsive ── */
 @media (max-width: 1200px) { .hc-grid.cols-4 { grid-template-columns: repeat(3,1fr); } }
 @media (max-width: 960px)  { .hc-grid.cols-4 { grid-template-columns: repeat(2,1fr); } .hc-sidebar { width: 190px; } }
+
+/* ─────────────────────────────────────────────────────────────
+   MOBILE RESPONSIVENESS OVERHAUL — 768px and below
+   Root causes fixed:
+   1. Sidebar consumes full viewport height — now collapsible drawer
+   2. Grid gap / padding too large for 360px
+   3. No overflow-x control — fixed via body
+   4. shop margin-top too large on mobile
+   5. Controls row overflow on tiny screens
+   6. Modal body padding too wide on 360px
+   ───────────────────────────────────────────────────────────── */
+
+/* PART 5 — Prevent horizontal scroll globally */
+html, body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+/* ── 768px: Tablet and below ──────────────────────────── */
 @media (max-width: 768px) {
-  .hc-shop { flex-direction: column; padding: 80px 16px 60px; }
-  .hc-sidebar { width: 100%; position: static; }
-  .hc-grid.cols-4, .hc-grid.cols-2 { grid-template-columns: repeat(2,1fr); }
+  /* PART 1 — Layout: stack sidebar above main */
+  .hc-shop {
+    flex-direction: column;
+    padding: 72px 0 60px;   /* nav height top, zero side (card padding handles it) */
+    gap: 0;
+    margin-top: 0;
+  }
+
+  /* PART 3 — Collapsible filter drawer ────────────────── */
+  /* Hide sidebar by default; shown via toggle */
+  .hc-sidebar {
+    width: 100%;
+    position: static;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1px solid var(--hc-border);
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.2s ease;
+  }
+  /* JS adds .hc-sidebar--open class to expand */
+  .hc-sidebar.hc-sidebar--open {
+    max-height: 600px;
+    padding: 16px;
+  }
+
+  /* Filter toggle button — shown only on mobile */
+  .hc-filter-toggle-btn {
+    display: flex !important; /* hidden on desktop */
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #fff;
+    border: 1px solid var(--hc-border);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--hc-text-primary);
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .hc-filter-toggle-btn.active {
+    background: var(--hc-accent);
+    border-color: var(--hc-accent);
+    color: #fff;
+  }
+
+  /* PART 1 — Main content padding */
+  .hc-main {
+    padding: 12px 12px 40px;
+  }
+
+  /* PART 4 — Controls bar: wrap cleanly */
+  .hc-controls {
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .hc-search-wrap {
+    flex: 1;
+    min-width: 0;
+  }
+  .hc-controls-right {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .hc-item-count {
+    display: none; /* hide count on small screens to save space */
+  }
+  .hc-sort-select {
+    font-size: 0.78rem;
+    padding: 7px 8px;
+    max-width: 130px;
+  }
+
+/* ── 768px: Tablet and Mobile (2-column layout) ───────────────── */
+@media (max-width: 768px) {
+  /* PART 1 — Layout: stack sidebar above main */
+  .hc-shop {
+    flex-direction: column;
+    padding: 72px 0 60px;   /* nav height top, zero side */
+    gap: 0;
+    margin-top: 0;
+  }
+
+  /* PART 3 — Collapsible filter drawer ────────────────── */
+  .hc-sidebar {
+    width: 100%;
+    position: static;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    border-bottom: 1px solid var(--hc-border);
+    padding: 0;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.2s ease;
+  }
+  .hc-sidebar.hc-sidebar--open {
+    max-height: 600px;
+    padding: 16px;
+  }
+
+  /* Filter toggle button */
+  .hc-filter-toggle-btn {
+    display: flex !important;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #fff;
+    border: 1px solid var(--hc-border);
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-family: 'Inter', sans-serif;
+    color: var(--hc-text-primary);
+    cursor: pointer;
+    font-weight: 500;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .hc-filter-toggle-btn.active {
+    background: var(--hc-accent);
+    border-color: var(--hc-accent);
+    color: #fff;
+  }
+
+  /* Main content padding */
+  .hc-main {
+    padding: 10px;
+  }
+
+  /* Controls bar */
+  .hc-controls {
+    gap: 8px;
+    margin-bottom: 12px;
+    flex-wrap: wrap;
+  }
+  .hc-search-wrap {
+    flex: 1;
+    min-width: 0;
+  }
+  .hc-controls-right {
+    gap: 6px;
+    flex-shrink: 0;
+  }
+  .hc-item-count {
+    display: none;
+  }
+  .hc-sort-select {
+    font-size: 0.78rem;
+    padding: 7px 8px;
+    max-width: 130px;
+  }
+
+  /* Grid: 2-column Amazon style */
+  .hc-grid.cols-4,
+  .hc-grid.cols-2 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  /* Card normalization for 2-column mobile layout */
+  .hc-card {
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Equal heights */
+  }
+  .hc-card-img-wrap {
+    width: 100%;
+    padding-top: 100%; /* aspect-ratio: 1/1 square */
+    background: #f4f0eb;
+    border-radius: 8px 8px 0 0;
+  }
+  .hc-card-img-wrap img {
+    object-fit: cover;
+  }
+  .hc-wishlist {
+    top: 6px;
+    right: 6px;
+    width: 28px;
+    height: 28px;
+  }
+
+  .hc-card-body {
+    padding: 8px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .hc-card-title {
+    font-size: 0.85rem;
+    -webkit-line-clamp: 2;
+    line-height: 1.2;
+    margin-bottom: 4px;
+  }
+  
+  .hc-card-origin { 
+    display: none; /* Hide descriptions to save space */
+  }
+  
+  .hc-card-bottom-row {
+    margin-top: auto;
+    flex-direction: column; /* Stack price and rating on small screens */
+    align-items: flex-start;
+    gap: 2px;
+    margin-bottom: 2px; /* space for cart button */
+  }
+  
+  .hc-card-price-row {
+    gap: 4px;
+  }
+  .hc-card-price {
+    font-size: 0.95rem;
+    font-weight: 700;
+  }
+  .hc-card-old-price {
+    font-size: 0.75rem;
+  }
+  
+  .hc-card-rating {
+    font-size: 0.75rem;
+    margin-top: 2px;
+  }
+
+  .hc-fab-cart {
+    width: 32px;
+    height: 32px;
+    bottom: 8px;
+    right: 8px;
+  }
+  
+  /* Modal adjustments for small screens */
+  .modal-body {
+    padding: 16px 14px 20px;
+  }
+  .modal-title {
+    font-size: 1.25rem;
+  }
+  .modal-price {
+    font-size: 1.5rem;
+  }
+  .modal-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+  .modal-actions .btn,
+  .modal-actions a {
+    width: 100%;
+    text-align: center;
+    justify-content: center;
+  }
 }
-@media (max-width: 480px) {
-  .hc-grid.cols-4, .hc-grid.cols-2 { grid-template-columns: 1fr; }
+
+/* ── 360px: Samsung Galaxy S8+ and below tweaks ────────────── */
+@media (max-width: 380px) {
+  .hc-card-title {
+    font-size: 0.8rem;
+  }
+  .hc-card-price {
+    font-size: 0.9rem;
+  }
+  .hc-fab-cart {
+    width: 28px;
+    height: 28px;
+  }
 }
+
+/* ── Desktop: Filter toggle button hidden ────────────── */
+@media (min-width: 769px) {
+  .hc-filter-toggle-btn {
+    display: none !important;
+  }
+  .hc-sidebar {
+    /* Reset any max-height applied by mobile JS toggle */
+    max-height: none !important;
+    overflow: visible;
+    padding: 20px 16px;
+  }
+}
+
