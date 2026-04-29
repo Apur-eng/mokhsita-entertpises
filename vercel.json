@@ -21,8 +21,5 @@
     { "source": "/dashboard/login", "destination": "/dashboard/login.html" }
   ],
 
-  "env": {
-    "SUPABASE_URL":      "https://txnckfkaecrqwooiobhs.supabase.co",
-    "SUPABASE_ANON_KEY": "@supabase_anon_key"
-  }
+  "_note": "Supabase credentials are embedded directly in dashboard/js/supabaseClient.js (anon key is public/safe). Re-introduce env vars here only after Vercel secrets are properly configured."
 }

@@ -186,20 +186,25 @@
 <script src="./js/auth.js"></script>
 <script>
   (function() {
-    // --- Route Protection ---
+    // Route protection + logout binding — both after DOM is ready
     window.addEventListener('DOMContentLoaded', async function() {
+
+      // --- Route Protection ---
       var user = await window.App.Auth.requireAuth('login.html');
       if (user) {
         console.log('[Dashboard] Admin authenticated as:', user.email);
       }
-    });
 
-    // --- Logout Logic (ID preserved: admin-logout-btn) ---
-    document.getElementById('admin-logout-btn').addEventListener('click', async function() {
-      var btn = document.getElementById('admin-logout-btn');
-      btn.textContent = 'Logging out…';
-      btn.disabled = true;
-      await window.App.Auth.logout('login.html');
+      // --- Logout Logic (ID preserved: admin-logout-btn) ---
+      var logoutBtn = document.getElementById('admin-logout-btn');
+      if (logoutBtn) {
+        logoutBtn.addEventListener('click', async function() {
+          logoutBtn.textContent = 'Logging out…';
+          logoutBtn.disabled = true;
+          await window.App.Auth.logout('login.html');
+        });
+      }
+
     });
   })();
 </script>
