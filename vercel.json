@@ -19,7 +19,5 @@
   "rewrites": [
     { "source": "/dashboard",       "destination": "/dashboard/index.html" },
     { "source": "/dashboard/login", "destination": "/dashboard/login.html" }
-  ],
-
-  "_note": "Supabase credentials are embedded directly in dashboard/js/supabaseClient.js (anon key is public/safe). Re-introduce env vars here only after Vercel secrets are properly configured."
+  ]
 }
